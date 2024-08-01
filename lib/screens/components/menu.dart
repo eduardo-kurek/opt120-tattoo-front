@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tatuagem_front/screens/login.dart';
 
 import '../register.dart';
 
@@ -17,6 +18,16 @@ class Menu extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const Register())
+                )
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.login),
+              title: const Text("Entrar"),
+              onTap: () => {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Login())
                 )
               },
             ),
