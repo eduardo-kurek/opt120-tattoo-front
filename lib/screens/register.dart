@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tatuagem_front/services/Api.dart';
+import 'package:tatuagem_front/utils/Messenger.dart';
 import 'components/menu.dart';
 
 class Register extends StatefulWidget {
@@ -12,9 +14,16 @@ class _RegisterState extends State<Register> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void register(){
-    print(_nameController.text);
-    print(_passwordController.text);
+  void register() async{
+    try {
+      final data = await ApiService.post('auth/register', {
+        'nome_usuario': _nameController.text,
+        'senha': _passwordController.text
+      });
+      Messenger.snackBar(context, data["message"]);
+    } catch (e) {
+      Messenger.snackBar(context, e.toString());
+    }
   }
 
   @override
@@ -26,7 +35,7 @@ class _RegisterState extends State<Register> {
       ),
       body: Container(
         color: Colors.black87,
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(50),
         child: Center(
           child: Card(
             child: Padding(
@@ -50,7 +59,7 @@ class _RegisterState extends State<Register> {
                     decoration: const InputDecoration(
                         labelText: 'Senha',
                         border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.password)
+                        prefixIcon: Icon(Icons.lock)
                     ),
                   ),
                   const SizedBox(height: 20),
