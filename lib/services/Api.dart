@@ -14,7 +14,7 @@ class ApiService {
         return <String, String>{"message": response.body};
       }
     } else {
-      throw Exception('Falha ao carregar dados');
+      throw Exception(response.body);
     }
   }
 
@@ -32,8 +32,7 @@ class ApiService {
         return <String, String>{"message": response.body};
       }
     } else {
-      print(response.body);
-      throw Exception('Falha ao criar dados');
+      throw Exception(response.body);
     }
   }
 
@@ -58,7 +57,7 @@ class ApiService {
   static Future<void> delete(String endpoint) async {
     final response = await http.delete(Uri.parse('$baseUrl/$endpoint'));
     if (response.statusCode != 200) {
-      throw Exception('Falha ao excluir dados');
+      throw Exception(response.body);
     }
   }
 }
