@@ -9,6 +9,23 @@ class HomePage extends StatelessWidget {
         title: Text('Home Page'),
       ),
       drawer: const UserMenu(),
+      body: Container(
+        color: Colors.black87,
+        padding: const EdgeInsets.all(50),
+        child: Center(
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text("Conteudo aqui...")
+                  ]
+                ),
+              ),
+            )
+        ),
+      ),
     );
   }
 }

@@ -45,40 +45,39 @@ class _RegisterState extends State<Register> {
           padding: const EdgeInsets.all(50),
           child: Center(
               child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text("Cadastrar", style: TextStyle(fontSize: 25)),
-                  const Divider(height: 50, indent: 10),
-                  TextFormField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(
-                        labelText: 'Usuário',
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.person)
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text("Cadastrar", style: TextStyle(fontSize: 25)),
+                        const Divider(height: 50, indent: 10),
+                        TextFormField(
+                          controller: _nameController,
+                          decoration: const InputDecoration(
+                              labelText: 'Usuário',
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Icons.person)),
+                        ),
+                        const SizedBox(height: 20),
+                        TextFormField(
+                          controller: _passwordController,
+                          decoration: const InputDecoration(
+                              labelText: 'Senha',
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Icons.lock)),
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                            onPressed: register,
+                            child: const Text("Cadastrar",
+                                style: TextStyle(fontSize: 17)))
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: _passwordController,
-                    decoration: const InputDecoration(
-                        labelText: 'Senha',
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.lock)
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                      onPressed: register,
-                      child: const Text("Cadastrar", style: TextStyle(fontSize: 17)))
-                ],
-              ),
-            ),
-          )
-        ),
-      )
+              )
+          ),
+        )
     );
   }
 }

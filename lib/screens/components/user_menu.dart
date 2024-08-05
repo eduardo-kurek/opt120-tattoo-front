@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tatuagem_front/screens/my_account.dart';
 
 class UserMenu extends StatelessWidget {
   const UserMenu({super.key});
@@ -6,28 +7,20 @@ class UserMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            child: Text(
-              'Menu',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-              ),
+        child: ListView(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text("Minha conta"),
+              onTap: () => {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MyAccount())
+                )
+              },
             ),
-          ),
-          ListTile(
-            leading: Icon(Icons.person),
-            title: Text('Conta'),
-            onTap: () {
-              // TODO: ao clicar abrir modal/menu para editar a conta
-            },
-          ),
-          // Add more ListTile widgets for additional menu items
-        ],
-      ),
+          ],
+        )
     );
   }
 }
