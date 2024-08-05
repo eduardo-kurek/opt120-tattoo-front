@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:tatuagem_front/services/Api.dart';
 import 'package:tatuagem_front/utils/Messenger.dart';
@@ -31,7 +33,8 @@ class _LoginState extends State<Login> {
 
       /* Messenger.snackBar(context, data["message"]); */
     } catch (e) {
-      Messenger.snackBar(context, e.toString());
+      Map<String, dynamic> data = jsonDecode(e.toString().replaceFirst('Exception: ', ''));
+      Messenger.snackBar(context, data['error']);
     }
   }
 
