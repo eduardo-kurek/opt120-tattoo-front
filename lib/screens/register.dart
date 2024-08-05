@@ -76,7 +76,9 @@ class _RegisterState extends State<Register> {
                 ],
               ),
             ),
-          )),
-        ));
+          )
+        ),
+      )
+    );
   }
 }
