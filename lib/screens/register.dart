@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tatuagem_front/services/Api.dart';
 import 'package:tatuagem_front/utils/Messenger.dart';
 import 'components/menu.dart';
-import 'home.dart';
+import 'login.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -22,12 +22,10 @@ class _RegisterState extends State<Register> {
         'senha': _passwordController.text
       });
 
-      Messenger.snackBar(context, data["message"]);
-
       if (data['statusCode'] == 201) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => Login()),
         );
       }
     } catch (e) {
