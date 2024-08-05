@@ -10,7 +10,7 @@ class ApiService {
     if (response.statusCode == 200) {
       try {
         return jsonDecode(response.body) as Map<String, dynamic>;
-      }catch(e){
+      } catch (e) {
         return <String, String>{"message": response.body};
       }
     } else {
@@ -25,10 +25,13 @@ class ApiService {
       body: jsonEncode(body),
     );
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 201 || response.statusCode == 200) {
       try {
-        return jsonDecode(response.body) as Map<String, dynamic>;
-      }catch(e){
+        return {
+          'statusCode': response.statusCode,
+          'body': jsonDecode(response.body),
+        };
+      } catch (e) {
         return <String, String>{"message": response.body};
       }
     } else {
@@ -46,7 +49,7 @@ class ApiService {
     if (response.statusCode == 200) {
       try {
         return jsonDecode(response.body) as Map<String, dynamic>;
-      }catch(e){
+      } catch (e) {
         return <String, String>{"message": response.body};
       }
     } else {
