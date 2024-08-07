@@ -3,15 +3,15 @@ import 'package:tatuagem_front/screens/components/authenticate.dart';
 import 'package:tatuagem_front/screens/components/menu.dart';
 import 'package:tatuagem_front/screens/components/user_menu.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class MyTattoos extends StatelessWidget {
+  const MyTattoos({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Authenticate(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Home Page'),
+          title: const Text('Minhas Tattoos'),
         ),
         drawer: const Menu(),
         body: Container(
@@ -24,7 +24,7 @@ class HomePage extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text("Conteudo aqui...")
+                      Text("CRUD Tatuagens...")
                     ]
                   ),
                 ),
