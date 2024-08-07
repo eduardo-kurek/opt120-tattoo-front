@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tatuagem_front/screens/user/my_account.dart';
 
-class UserMenu extends StatelessWidget {
-  const UserMenu({super.key});
+class ArtistMenu extends StatelessWidget {
+  const ArtistMenu({super.key});
 
   @override
   Widget build(BuildContext context) {

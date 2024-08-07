@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class ApiService {
@@ -62,5 +63,17 @@ class ApiService {
     if (response.statusCode != 200) {
       throw Exception(response.body);
     }
+  }
+
+  static Future<bool> isLogged() async{
+    return false;
+
+    /* TODO */
+  }
+
+  static Future<bool> isArtist() async{
+    return false;
+
+    /* TODO */
   }
 }
