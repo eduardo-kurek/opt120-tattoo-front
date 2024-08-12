@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+import 'package:tatuagem_front/utils/TokenProvider.dart';
 
 import '../../services/Api.dart';
 
@@ -20,15 +22,13 @@ class _UserOrArtistState extends State<UserOrArtist> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: ApiService.isArtist(),
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.hasData && snapshot.data == true) {
-          return widget.artist;
-        } else {
-          return widget.user;
-        }
-      },
-    );
-  }
+    final tokenProvider = Provider.of<TokenProvider>(context);
+
+    if (tokenProvider.isArtist()) {
+      return widget.artist;
+    }
+
+    return widget.user;
+    
+}
 }

@@ -11,7 +11,14 @@ class TokenProvider with ChangeNotifier {
   void setToken(String token) {
     _token = token;
     _decodedToken = JwtDecoder.decode(token);
+    print(_decodedToken);
     notifyListeners();
+  }
+
+  bool isArtist() {
+    var artist = _decodedToken['tatuador'];
+    if (!artist) return false;
+    return true;
   }
 
   bool isTokenExpired() {
@@ -19,7 +26,7 @@ class TokenProvider with ChangeNotifier {
   }
 
   bool isLogged() {
-    return token != '' && !isTokenExpired();
+    return _token != '' && !isTokenExpired();
   }
 
   DateTime getTokenExpirationDate() {
