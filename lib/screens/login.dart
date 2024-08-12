@@ -1,8 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:tatuagem_front/services/Api.dart';
 import 'package:tatuagem_front/utils/Messenger.dart';
+import 'package:tatuagem_front/utils/TokenProvider.dart';
+
 import 'user/home.dart';
 import 'components/menu.dart';
 
@@ -17,14 +21,16 @@ class _LoginState extends State<Login> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void login() async {
+  void login(void Function(String) setToken) async {
     try {
-      final data = await ApiService.post('auth/login', {
+      final Map<String, dynamic> data = await ApiService.post('auth/login', {
         'nome_usuario': _nameController.text,
         'senha': _passwordController.text
       });
 
+
       if (data['statusCode'] == 200) {
+        setToken(data['body']['token']);
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => HomePage()),
@@ -39,7 +45,9 @@ class _LoginState extends State<Login> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {  
+    final tokenProvider = Provider.of<TokenProvider>(context);
+
     return Scaffold(
         drawer: const Menu(),
         appBar: AppBar(
@@ -76,7 +84,7 @@ class _LoginState extends State<Login> {
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                      onPressed: login,
+                      onPressed: () => login(tokenProvider.setToken),
                       child: const Text("Entrar", style: TextStyle(fontSize: 17)))
                 ],
               ),
