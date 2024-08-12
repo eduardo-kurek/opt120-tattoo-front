@@ -65,15 +65,4 @@ class ApiService {
     }
   }
 
-  static Future<bool> isLogged() async{
-    return false;
-
-    /* TODO */
-  }
-
-  static Future<bool> isArtist() async{
-    return false;
-
-    /* TODO */
-  }
 }

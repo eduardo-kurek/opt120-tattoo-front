@@ -17,8 +17,8 @@ class TokenProvider with ChangeNotifier {
 
   bool isArtist() {
     var artist = _decodedToken['tatuador'];
-    if (!artist) return false;
-    return true;
+    if (artist != null) return true;
+    return false;
   }
 
   bool isTokenExpired() {
