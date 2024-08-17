@@ -34,7 +34,7 @@ class UserMenu extends StatelessWidget {
         ),
         ListTile(
           leading: const Icon(Icons.palette),
-          title: const Text("Virar tatoador"),
+          title: const Text("Virar tatuador"),
           onTap: () {
             showDialog(
               context: context,
