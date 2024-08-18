@@ -8,7 +8,6 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'dart:html' as html;
 import 'dart:convert';
 import 'package:http_parser/http_parser.dart';
 
@@ -29,24 +28,24 @@ class _TattooArtistFormState extends State<TattooArtistForm> {
   List<int>? _selectedFile;
   Uint8List? _bytesData;
   
-  startWebFilePicker()async{
-    html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
-    uploadInput.draggable = true;
-    uploadInput.click();
-
-    uploadInput.onChange.listen((event){
-      final files = uploadInput.files;
-      final file = files![0];
-      final reader = html.FileReader();
-
-      reader.onLoadEnd.listen((event){
-        setState(() {
-          _bytesData = Base64Decoder().convert(reader.result.toString().split(',').last);
-        });
-      });
-      reader.readAsDataUrl(file);
-    });
-  }
+  // startWebFilePicker()async{
+  //   html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
+  //   uploadInput.draggable = true;
+  //   uploadInput.click();
+  //
+  //   uploadInput.onChange.listen((event){
+  //     final files = uploadInput.files;
+  //     final file = files![0];
+  //     final reader = html.FileReader();
+  //
+  //     reader.onLoadEnd.listen((event){
+  //       setState(() {
+  //         _bytesData = Base64Decoder().convert(reader.result.toString().split(',').last);
+  //       });
+  //     });
+  //     reader.readAsDataUrl(file);
+  //   });
+  // }
 
   void createTatoador() async {
     final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
@@ -70,7 +69,7 @@ class _TattooArtistFormState extends State<TattooArtistForm> {
           'experiencia': xp,
           'status': _statusController.text,
           'tipo': _tipoController.text,
-          'imagem_perfil': imageBase64
+          // 'imagem_perfil': imageBase64
         },
         headers: {
           'Authorization': 'Bearer $token',
@@ -133,12 +132,12 @@ class _TattooArtistFormState extends State<TattooArtistForm> {
               ),
             ),
             SizedBox(height: 20,),
-            IconButton(
-              icon: Icon(Icons.add_a_photo),
-              onPressed: (){
-                startWebFilePicker();
-              }, // Abra o seletor de imagem
-            ),
+            // IconButton(
+            //   icon: Icon(Icons.add_a_photo),
+            //   onPressed: (){
+            //     startWebFilePicker();
+            //   }, // Abra o seletor de imagem
+            // ),
             _bytesData != null ? Image.memory(_bytesData!, width: 20, height: 20) : Container()
 
           ],
