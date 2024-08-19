@@ -11,9 +11,6 @@ class ApiService {
       headers: headers ?? {'Content-Type': 'application/json; charset=UTF-8'}
     );
 
-    print(response.statusCode);
-    print(response.body);
-
     if (response.statusCode == 200) {
       try {
         return jsonDecode(response.body) as Map<String, dynamic>;
@@ -22,6 +19,28 @@ class ApiService {
       }
     } else {
       throw Exception(response.body);
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> getAll(String endpoint, {Map<String, String>? headers}) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/$endpoint'),
+      headers: headers ?? {'Content-Type': 'application/json; charset=UTF-8'},
+    );
+
+    if (response.statusCode == 200) {
+      try {
+        // Decodifica a resposta como uma lista de mapas
+        final List<dynamic> jsonResponse = jsonDecode(response.body);
+        // Converte a lista dinâmica para uma lista de Map<String, dynamic>
+        return jsonResponse.map((item) => item as Map<String, dynamic>).toList();
+      } catch (e) {
+        // Em caso de erro na decodificação, retorna uma lista vazia
+        print('Erro ao decodificar a resposta: $e');
+        return [];
+      }
+    } else {
+      throw Exception('Erro ${response.statusCode}: ${response.body}');
     }
   }
 

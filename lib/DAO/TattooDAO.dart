@@ -1,22 +1,36 @@
 import 'package:tatuagem_front/services/Api.dart';
 
 import '../Models/Tattoo.dart';
+import '../utils/TokenProvider.dart';
 
 class TattooDAO{
 
-  static Future<List<Tattoo>> getAllByArtist(String artistId) async{
-    /* final data = ApiService.get('') TODO */
-    final tattoo1 = Tattoo(imagem: "tattoo1", preco: 100.00);
-    final tattoo2 = Tattoo(imagem: "tattoo2", preco: 50.00);
-    List<Tattoo> list = [tattoo1, tattoo2];
-    return list;
+  TokenProvider tokenProvider;
+
+  TattooDAO({
+   required this.tokenProvider
+  });
+
+  Future<List<Tattoo>> getAllByArtist(String artistId) async{
+    final decodedToken = tokenProvider.decodedToken;
+    final String id = decodedToken['id'];
+
+    final List<Map<String, dynamic>> data = await ApiService.getAll(
+      'api/tatuagens',
+      headers: {
+        'Authorization': 'Bearer ${await tokenProvider.token}'
+      },
+    );
+
+    final List<Tattoo> tattoos = data.map((map) => Tattoo.fromJson(map)).toList();
+    return tattoos;
   }
 
-  static Future<void> create(Tattoo tattoo) async{
+  Future<void> create(Tattoo tattoo) async{
     /* TODO */
   }
 
-  static Future<void> update(Tattoo tattoo) async{
+  Future<void> update(Tattoo tattoo) async{
     /* TODO */
   }
 

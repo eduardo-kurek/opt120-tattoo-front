@@ -28,4 +28,22 @@ class Tattoo{
     this.tatuador_id = '',
     this.criado_por = '',
   });
+
+  factory Tattoo.fromJson(Map<String, dynamic> json) {
+    return Tattoo(
+      imagem: json['imagem'] ?? '',
+      preco: json['preco']?.toDouble() ?? 0.0,
+      id: json['id'] ?? '',
+      tamanho: json['tamanho'] ?? 0,
+      cor: json['cor'] ?? '',
+      estilo: json['estilo'] ?? '',
+      data_criacao: json['data_criacao'] ?? '',
+      data_atualizacao: json['data_atualizacao'] ?? '',
+      data_exclusao: json['data_exclusao'] ?? '',
+      client_id: json['client_id'] ?? '',
+      agendamento_id: json['agendamento_id'] ?? '',
+      tatuador_id: json['tatuador_id'] ?? '',
+      criado_por: json['criado_por'] ?? '',
+    );
+  }
 }

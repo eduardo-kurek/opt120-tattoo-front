@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:tatuagem_front/DAO/TattooDAO.dart';
 import 'package:tatuagem_front/screens/components/authenticate.dart';
 import 'package:tatuagem_front/screens/components/menu.dart';
@@ -7,6 +8,7 @@ import 'package:tatuagem_front/screens/components/user_menu.dart';
 import 'package:tatuagem_front/utils/Messenger.dart';
 
 import '../../../Models/Tattoo.dart';
+import '../../../utils/TokenProvider.dart';
 
 class MyTattoos extends StatefulWidget {
   const MyTattoos({super.key});
@@ -18,12 +20,20 @@ class MyTattoos extends StatefulWidget {
 class _MyTattoosState extends State<MyTattoos> {
   List<Tattoo> _tattoos = [];
   final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _imageController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
 
   Future<void> _create() async{
     String msg = "Tatuagem cadastrada com sucesso";
     try{
-
+      final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
+      TattooDAO dao = TattooDAO(tokenProvider: tokenProvider);
+      Tattoo tattoo = Tattoo(
+        preco: double.parse(_priceController.text),
+        imagem: _imageController.text,
+        estilo: _titleController.text
+      );
+      dao.create(tattoo);
       _refreshData();
     }catch(e){
       msg = e.toString();
@@ -54,7 +64,11 @@ class _MyTattoosState extends State<MyTattoos> {
   }
 
   void _refreshData() async{
-    _tattoos = await TattooDAO.getAllByArtist("id");
+    final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
+    TattooDAO dao = TattooDAO(tokenProvider: tokenProvider);
+    var decoded = tokenProvider.decodedToken;
+
+    _tattoos = await dao.getAllByArtist(decoded['id']);
     setState(() {});
   }
 
@@ -65,11 +79,13 @@ class _MyTattoosState extends State<MyTattoos> {
     if(tattooId != null){
       final existingData = _tattoos.firstWhere((element) => element.id == tattooId);
       _titleController.text = existingData.estilo;
+      _imageController.text = existingData.imagem;
       _priceController.text = existingData.preco.toStringAsFixed(2);
       title = "Atualizar tatuagem";
       exit = "Salvar";
     }else{
       _titleController.clear();
+      _imageController.clear();
       _priceController.clear();
     }
 
@@ -103,6 +119,15 @@ class _MyTattoosState extends State<MyTattoos> {
             ),
             const SizedBox(height: 10),
             TextField(
+              controller: _imageController,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+                  hintText: "Imagem"
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextField(
               controller: _priceController,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: [
@@ -121,6 +146,7 @@ class _MyTattoosState extends State<MyTattoos> {
                   else await _update();
 
                   _titleController.clear();
+                  _imageController.clear();
                   _priceController.clear();
                   Navigator.of(context).pop();
                 },
@@ -162,8 +188,8 @@ class _MyTattoosState extends State<MyTattoos> {
                 child: Column(
                   children: [
                     ListTile(
-                      title: Text("Título"),
-                      subtitle: Text("Preço"),
+                      title: Text(_tattoos[i].estilo),
+                      subtitle: Text(_tattoos[i].preco.toStringAsFixed(2)),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -178,8 +204,8 @@ class _MyTattoosState extends State<MyTattoos> {
                         ],
                       ),
                     ),
-                    Divider(height: 10),
-                    Text("Imagem: ")
+                    const Divider(height: 10),
+                    Text(_tattoos[i].imagem)
                   ],
                 )
               ),

@@ -16,6 +16,7 @@ class TokenProvider with ChangeNotifier {
   }
 
   bool isArtist() {
+    return true; // PARA TESTE
     var artist = _decodedToken['tatuador'];
     if (artist != null) return true;
     return false;
