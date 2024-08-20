@@ -11,6 +11,21 @@ class TattooDAO{
    required this.tokenProvider
   });
 
+  Future<List<Tattoo>> getAll() async{
+    final decodedToken = tokenProvider.decodedToken;
+
+    final List<Map<String, dynamic>> data = await ApiService.getAll(
+      'api/tatuagens',
+      headers: {
+        'Authorization': 'Bearer ${await tokenProvider.token}'
+      },
+    );
+
+    final List<Tattoo> tattoos = data.map((map) => Tattoo.fromJson(map)).toList();
+    return tattoos;
+  }
+
+  /* Filtrar por artistId TODO */
   Future<List<Tattoo>> getAllByArtist(String artistId) async{
     final decodedToken = tokenProvider.decodedToken;
     final String id = decodedToken['id'];

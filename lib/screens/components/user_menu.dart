@@ -3,6 +3,7 @@ import 'package:tatuagem_front/screens/user/home.dart';
 import 'package:tatuagem_front/screens/user/my_account.dart';
 import 'package:tatuagem_front/forms/tattoo_artist_form.dart';
 import 'package:tatuagem_front/forms/my_account_form.dart';
+import 'package:tatuagem_front/screens/user/new_scheduling.dart';
 
 class UserMenu extends StatelessWidget {
   const UserMenu({super.key});
@@ -40,6 +41,18 @@ class UserMenu extends StatelessWidget {
               context: context,
               builder: (BuildContext context) {
                 return const TattooArtistForm(); // Use o widget criado
+              },
+            );
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.schedule),
+          title: const Text("Novo agendamento"),
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return const NewScheduling(); // Use o widget criado
               },
             );
           },
