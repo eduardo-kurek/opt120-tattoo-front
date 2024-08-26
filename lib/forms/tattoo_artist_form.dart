@@ -52,7 +52,7 @@ class _TattooArtistFormState extends State<TattooArtistForm> {
     final String token = await tokenProvider.token;
     final decodedToken = tokenProvider.decodedToken;
     final String id = decodedToken['id'];
-    int xp = int.parse(_experienciaController.text);
+    final String xp = _experienciaController.text;
 
     try {
 
