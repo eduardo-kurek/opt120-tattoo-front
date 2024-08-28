@@ -25,16 +25,11 @@ class _RegisterState extends State<Register> {
         'senha': _passwordController.text
       });
 
-      if(_isArtist){
-        // Cadastra como artista
-      }
-
-      if (data['statusCode'] == 201) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Login()),
-        );
-      }
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Login()),
+      );
+      Messenger.snackBar(context, "Usuário cadastrado com sucesso");
     } catch (e) {
       Map<String, dynamic> data = jsonDecode(e.toString().replaceFirst('Exception: ', ''));
       Messenger.snackBar(context, data['error']);
@@ -74,21 +69,6 @@ class _RegisterState extends State<Register> {
                               labelText: 'Senha',
                               border: OutlineInputBorder(),
                               prefixIcon: Icon(Icons.lock)),
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Checkbox(
-                              value: _isArtist,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  _isArtist = value ?? false;
-                                });
-                              }
-                            ),
-                            const Text("Cadastrar como tatuador")
-                          ],
                         ),
                         const SizedBox(height: 20),
                         ElevatedButton(

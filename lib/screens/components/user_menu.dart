@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tatuagem_front/screens/user/become_artist.dart';
 import 'package:tatuagem_front/screens/user/home.dart';
+import 'package:tatuagem_front/screens/user/logout.dart';
 import 'package:tatuagem_front/screens/user/my_account.dart';
 import 'package:tatuagem_front/forms/tattoo_artist_form.dart';
 import 'package:tatuagem_front/forms/my_account_form.dart';
@@ -25,24 +27,16 @@ class UserMenu extends StatelessWidget {
           leading: const Icon(Icons.person),
           title: const Text("Minha conta"),
           onTap: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return const MyAccountForm(); // Use o widget criado
-              },
-            );
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const MyAccount()));
           },
         ),
         ListTile(
           leading: const Icon(Icons.palette),
           title: const Text("Virar tatuador"),
           onTap: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return const TattooArtistForm(); // Use o widget criado
-              },
-            );
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const BecomeArtist()));
           },
         ),
         ListTile(
@@ -55,6 +49,14 @@ class UserMenu extends StatelessWidget {
                 return const NewScheduling(); // Use o widget criado
               },
             );
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.logout),
+          title: const Text("Sair"),
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const Logout()));
           },
         ),
       ],

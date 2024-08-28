@@ -40,7 +40,7 @@ class _LoginState extends State<Login> {
       /* Messenger.snackBar(context, data["message"]); */
     } catch (e) {
       Map<String, dynamic> data = jsonDecode(e.toString().replaceFirst('Exception: ', ''));
-      Messenger.snackBar(context, data['error']);
+      Messenger.snackBar(context, "Credenciais inválidas");
     }
   }
 

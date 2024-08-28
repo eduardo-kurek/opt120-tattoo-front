@@ -15,6 +15,11 @@ class TokenProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void clear(){
+    _token = '';
+    _decodedToken = {};
+  }
+
   bool isArtist() {
     var artist = _decodedToken['tatuador'];
     if (artist != null) return true;

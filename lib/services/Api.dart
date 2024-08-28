@@ -118,14 +118,11 @@ class ApiService {
       '$baseUrl/$endpoint'),
       headers: headers ?? {'Content-Type': 'application/json; charset=UTF-8'},
     );
-
-    print(response.statusCode);
-    print(response.body);
     
     if (response.statusCode == 204) {
       return {
         'statusCode': response.statusCode,
-        'body': jsonDecode(response.body),
+        'body': response.body.isEmpty ? '' : jsonDecode(response.body),
       };
     } else {
         return {

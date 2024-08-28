@@ -3,6 +3,8 @@ import 'package:tatuagem_front/screens/user/artist/my_tattoos.dart';
 import 'package:tatuagem_front/screens/user/home.dart';
 import 'package:tatuagem_front/screens/user/my_account.dart';
 
+import '../user/logout.dart';
+
 class ArtistMenu extends StatelessWidget {
   const ArtistMenu({super.key});
 
@@ -39,6 +41,14 @@ class ArtistMenu extends StatelessWidget {
                     context,
                     MaterialPageRoute(builder: (context) => const MyTattoos())
                 )
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text("Sair"),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const Logout()));
               },
             ),
           ],
