@@ -23,7 +23,8 @@ class _BecomeArtistState extends State<BecomeArtist> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _experienciaController = TextEditingController();
   final TextEditingController _statusController = TextEditingController();
-  final TextEditingController _tipoController = TextEditingController();
+  String _tipoController = 'PROPRIETARIO';
+  final List<String> _tipoOptions = ['PROPRIETARIO', 'AUTONOMO'];
 
   List<int>? _selectedFile;
   Uint8List? _bytesData;
@@ -68,7 +69,7 @@ class _BecomeArtistState extends State<BecomeArtist> {
           'nome': _nameController.text,
           'experiencia': xp,
           'status': _statusController.text,
-          'tipo': _tipoController.text,
+          'tipo': _tipoController,
           // 'imagem_perfil': imageBase64
         },
         headers: {
@@ -96,7 +97,7 @@ class _BecomeArtistState extends State<BecomeArtist> {
     _nameController.dispose();
     _experienciaController.dispose();
     _statusController.dispose();
-    _tipoController.dispose();
+    _tipoController = '';
     super.dispose();
   }
 
@@ -137,11 +138,28 @@ class _BecomeArtistState extends State<BecomeArtist> {
                             labelText: 'Status',
                           ),
                         ),
-                        TextFormField(
-                          controller: _tipoController,
+                        DropdownButtonFormField(
+                          value: _tipoController, // Valor atual do dropdown
                           decoration: const InputDecoration(
                             labelText: 'Tipo',
                           ),
+                          items: const [
+                            DropdownMenuItem(
+                              value: "PROPRIETARIO",
+                              child: Text("PROPRIETARIO")
+                            ),
+                            DropdownMenuItem(
+                                value: "AUTONOMO",
+                                child: Text("AUTONOMO")
+                            )
+                          ],
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              if(newValue != null){
+                                _tipoController = newValue;
+                              }
+                            });
+                          },
                         ),
                         const SizedBox(height: 20),
                         // IconButton(
