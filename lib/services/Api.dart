@@ -53,9 +53,6 @@ class ApiService {
       body: jsonEncode(body),
     );
 
-    print(response.statusCode);
-    print(response.body);
-
     if (response.statusCode == 201 || response.statusCode == 200) {
       try {
         return {
@@ -95,9 +92,6 @@ class ApiService {
       headers: headers ?? {'Content-Type': 'application/json; charset=UTF-8'},
       body: jsonEncode(body),
     );
-
-    print(response.statusCode);
-    print(response.body);
 
     if (response.statusCode == 200) {
       try {
