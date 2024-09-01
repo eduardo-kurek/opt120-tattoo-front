@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tatuagem_front/screens/user/artist/my_tattoos.dart';
-import 'package:tatuagem_front/screens/user/home.dart';
+import 'package:tatuagem_front/screens/user/user_home.dart';
 import 'package:tatuagem_front/screens/user/my_account.dart';
 
 import '../user/logout.dart';
@@ -19,7 +19,7 @@ class ArtistMenu extends StatelessWidget {
               onTap: () => {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const HomePage())
+                    MaterialPageRoute(builder: (context) => const UserHome())
                 )
               },
             ),

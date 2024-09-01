@@ -7,7 +7,7 @@ import 'package:tatuagem_front/services/Api.dart';
 import 'package:tatuagem_front/utils/Messenger.dart';
 import 'package:tatuagem_front/utils/TokenProvider.dart';
 
-import 'user/home.dart';
+import 'user/user_home.dart';
 import 'components/menu.dart';
 
 class Login extends StatefulWidget {
@@ -33,7 +33,7 @@ class _LoginState extends State<Login> {
         setToken(data['body']['token']);
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => UserHome()),
         );
       }
 

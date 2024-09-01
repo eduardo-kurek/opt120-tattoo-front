@@ -10,7 +10,7 @@ import '../../services/Api.dart';
 import '../../utils/Messenger.dart';
 import '../../utils/TokenProvider.dart';
 import '../components/menu.dart';
-import 'home.dart';
+import 'user_home.dart';
 
 class BecomeArtist extends StatefulWidget {
   const BecomeArtist({super.key});

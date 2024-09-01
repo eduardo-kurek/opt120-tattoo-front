@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tatuagem_front/services/Api.dart';
 import 'package:tatuagem_front/utils/Messenger.dart';
 import 'package:tatuagem_front/utils/TokenProvider.dart';
-import '../screens/user/home.dart';
+import '../screens/user/user_home.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'dart:typed_data';
@@ -80,7 +80,7 @@ class _TattooArtistFormState extends State<TattooArtistForm> {
       if (data['statusCode'] == 201) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => UserHome()),
         );
       }
     } catch (e) {
