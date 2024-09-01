@@ -27,13 +27,14 @@ class _MyTattoosState extends State<MyTattoos> {
     String msg = "Tatuagem cadastrada com sucesso";
     try{
       final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
+
       TattooDAO dao = TattooDAO(tokenProvider: tokenProvider);
       Tattoo tattoo = Tattoo(
         preco: double.parse(_priceController.text),
         imagem: _imageController.text,
         estilo: _titleController.text
       );
-      dao.create(tattoo);
+      dao.create(tattoo, tokenProvider.decodedToken['id']);
       _refreshData();
     }catch(e){
       msg = e.toString();
@@ -41,10 +42,17 @@ class _MyTattoosState extends State<MyTattoos> {
     Messenger.snackBar(context, msg);
   }
 
-  Future<void> _update() async{
+  Future<void> _update(String estilo, String preco, String img, String tattoId) async{
     String msg = "Tatuagem atualizada com sucesso";
     try{
-
+        final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
+        TattooDAO dao = TattooDAO(tokenProvider: tokenProvider);
+        Tattoo tattoo = Tattoo(
+          preco: double.parse(preco),
+          imagem: img,
+          estilo: estilo
+        );
+        dao.update(tattoo, tattoId);
       _refreshData();
     }catch(e){
       msg = e.toString();
@@ -55,7 +63,8 @@ class _MyTattoosState extends State<MyTattoos> {
   Future<void> _delete(String tattooId) async{
     String msg = "Tatuagem deletada com sucesso";
     try{
-
+      TattooDAO dao = TattooDAO(tokenProvider: Provider.of<TokenProvider>(context, listen: false));
+      dao.delete(tattooId);
       _refreshData();
     }catch(e){
       msg = e.toString();
@@ -68,7 +77,7 @@ class _MyTattoosState extends State<MyTattoos> {
     TattooDAO dao = TattooDAO(tokenProvider: tokenProvider);
     var decoded = tokenProvider.decodedToken;
 
-    _tattoos = await dao.getAllByArtist(decoded['id']);
+    _tattoos = await dao.getAllByArtist();
     setState(() {});
   }
 
@@ -143,7 +152,7 @@ class _MyTattoosState extends State<MyTattoos> {
               child: ElevatedButton(
                 onPressed: () async{
                   if(tattooId == null) await _create();
-                  else await _update();
+                  else await _update(_titleController.text, _priceController.text, _imageController.text, tattooId);
 
                   _titleController.clear();
                   _imageController.clear();
@@ -199,7 +208,8 @@ class _MyTattoosState extends State<MyTattoos> {
                           ),
                           IconButton(
                             onPressed: (){_delete(_tattoos[i].id);},
-                            icon: const Icon(Icons.delete)
+                            icon: const Icon(Icons.delete),
+                            color: Colors.red,
                           )
                         ],
                       ),
