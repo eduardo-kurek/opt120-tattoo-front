@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:tatuagem_front/DAO/TattooDAO.dart';
 import 'package:tatuagem_front/screens/components/authenticate.dart';
@@ -21,7 +20,6 @@ class _NewSchedulingState extends State<NewScheduling> {
   void _refreshData() async {
     final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
     TattooDAO dao = TattooDAO(tokenProvider: tokenProvider);
-    var decoded = tokenProvider.decodedToken;
 
     _tattoos = await dao.getAll();
     setState(() {});
@@ -45,11 +43,10 @@ class _NewSchedulingState extends State<NewScheduling> {
           color: Colors.black87,
           padding: const EdgeInsets.all(15),
           child: LayoutBuilder(builder: (context, constraints) {
-            // Calcula o número de colunas com base na largura da tela
             int crossAxisCount = (constraints.maxWidth / 200).floor();
             return GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: crossAxisCount, // Número de colunas
+                  crossAxisCount: crossAxisCount > 0 ? crossAxisCount : 1, // Número de colunas
                   crossAxisSpacing: 20.0,
                   mainAxisSpacing: 20.0,
                   childAspectRatio: 0.6, // Proporção do card (largura/altura)
@@ -76,7 +73,6 @@ class TatooCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('tatoo.imagem: ${tatoo.imagem}');
     return Card(
       elevation: 4.0,
       child: Column(
@@ -90,7 +86,7 @@ class TatooCard extends StatelessWidget {
               fit: BoxFit.cover,
               errorBuilder: (BuildContext context, Object exception,
                   StackTrace? stackTrace) {
-                return Placeholder();
+                return const Placeholder();
               },
             ),
           ),
@@ -129,14 +125,13 @@ class TatooCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // const SizedBox(
-                  //   height: 50,
-                  // ),
+                  const Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 8.0),
                         child: TextButton(
                           onPressed: () {
                             print('botão do card pressionado');

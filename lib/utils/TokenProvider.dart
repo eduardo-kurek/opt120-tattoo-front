@@ -16,7 +16,7 @@ class TokenProvider with ChangeNotifier {
   Future<void> _loadToken() async {
     String? savedToken = await getToken();
     if (savedToken != null && savedToken.isNotEmpty) {
-      _token = savedToken;
+      setToken(savedToken);
       notifyListeners(); // Notifica os listeners que o token foi atualizado
     }
   }
@@ -35,7 +35,6 @@ class TokenProvider with ChangeNotifier {
     _token = token;
     _decodedToken = JwtDecoder.decode(token);
     saveToken(token);
-    print(_decodedToken);
     notifyListeners();
   }
 
