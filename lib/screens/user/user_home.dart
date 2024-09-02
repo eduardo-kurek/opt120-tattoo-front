@@ -80,7 +80,7 @@ class _UserHomeState extends State<UserHome> {
                         const Divider(height: 10),
                         TextButton(
                             onPressed: () {
-                              _cancelar(_schedules[i].agendamentoId);
+                              _cancelar(_schedules[i].agendamento_id);
                             },
                             child: Text('Cancelar agendamento')
                         )
