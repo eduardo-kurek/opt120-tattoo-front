@@ -7,14 +7,14 @@ import 'package:tatuagem_front/screens/components/menu.dart';
 import 'package:tatuagem_front/screens/components/user_menu.dart';
 import 'package:tatuagem_front/utils/TokenProvider.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class ArtistHome extends StatefulWidget {
+  const ArtistHome({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<ArtistHome> createState() => _ArtistHomeState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _ArtistHomeState extends State<ArtistHome> {
   List<Tattoo> _tattoos = [];
 
   void _refreshData() async {

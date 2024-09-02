@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tatuagem_front/screens/user/become_artist.dart';
-import 'package:tatuagem_front/screens/user/home.dart';
+import 'package:tatuagem_front/screens/user/user_home.dart';
 import 'package:tatuagem_front/screens/user/logout.dart';
 import 'package:tatuagem_front/screens/user/my_account.dart';
 import 'package:tatuagem_front/forms/tattoo_artist_form.dart';
@@ -20,7 +20,7 @@ class UserMenu extends StatelessWidget {
           title: const Text("Home"),
           onTap: () => {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const HomePage()))
+                MaterialPageRoute(builder: (context) => const UserHome()))
           },
         ),
         ListTile(

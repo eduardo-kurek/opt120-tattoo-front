@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tatuagem_front/services/Api.dart';
 import 'package:tatuagem_front/utils/Messenger.dart';
 import 'package:tatuagem_front/utils/TokenProvider.dart';
-import '../screens/user/home.dart';
+import '../screens/user/user_home.dart';
 import '../screens/register.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
