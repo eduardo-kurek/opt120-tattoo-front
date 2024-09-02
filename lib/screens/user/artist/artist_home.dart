@@ -44,7 +44,7 @@ class _ArtistHomeState extends State<ArtistHome> {
           color: Colors.black87,
           padding: const EdgeInsets.all(50),
           child: const Center(
-              child: Card(
+            child: Card(
             child: Padding(
               padding: EdgeInsets.all(20.0),
               child: Column(
