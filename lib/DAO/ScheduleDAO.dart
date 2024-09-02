@@ -58,6 +58,38 @@ class ScheduleDAO {
   }
 
   Future<List<Schedule>> getAllByArtistUser() async {
+    return [
+      Schedule(
+        id: '1',
+        preco: 170.00,
+        imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7pXAZGiCXpYCBRyKB_-EHWZOGL7VI6tjWRg&s',
+        tamanho: 20,
+        cor: 'Preto',
+        estilo: 'Old School',
+        data_criacao: '2024-09-01T12:00:00Z',
+        data_atualizacao: '2024-09-02T12:00:00Z',
+        data_exclusao: '',
+        client_id: 'cliente1',
+        agendamento_id: 'agendamento1',
+        tatuador_id: 'tatuador1',
+        criado_por: 'user1',
+      ),
+      Schedule(
+        id: '2',
+        preco: 200.00,
+        imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7pXAZGiCXpYCBRyKB_-EHWZOGL7VI6tjWRg&s',
+        tamanho: 30,
+        cor: 'Azul',
+        estilo: 'Realismo',
+        data_criacao: '2024-08-15T09:00:00Z',
+        data_atualizacao: '2024-08-16T09:00:00Z',
+        data_exclusao: '',
+        client_id: 'cliente2',
+        agendamento_id: 'agendamento2',
+        tatuador_id: 'tatuador2',
+        criado_por: 'user2',
+      ),
+    ];
     final decodedToken = tokenProvider.decodedToken;
     final String artistId = decodedToken['tatuador']['id'];
 
