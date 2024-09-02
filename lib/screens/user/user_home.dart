@@ -58,39 +58,39 @@ class _UserHomeState extends State<UserHome> {
           child: ListView.builder(
             itemCount: _schedules.length,
             itemBuilder: (context, i) => Card(
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    ListTile(
-                      title: Text(_schedules[i].estilo ?? 'Estilo'),
-                      subtitle: Text(_schedules[i].preco?.toStringAsFixed(2) ?? 'Preço'),
-                    ),
-                    const Divider(height: 10),
-                    Image.network(
-                      _schedules[i].imagem ?? '',
-                      width: double.infinity,
-                      height: 400,
-                      fit: BoxFit.cover,
-                      errorBuilder: (BuildContext context, Object exception,
-                          StackTrace? stackTrace) {
-                        return Text("Erro ao buscar imagem");
-                      },
-                    ),
-                    const Divider(height: 10),
-                    TextButton(
-                        onPressed: () {
-                          _cancelar(_schedules[i].agendamentoId);
-                        },
-                        child: Text('Cancelar agendamento')
+                child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        ListTile(
+                          title: Text(_schedules[i].estilo ?? 'Estilo'),
+                          subtitle: Text(_schedules[i].preco?.toStringAsFixed(2) ?? 'Preço'),
+                        ),
+                        const Divider(height: 10),
+                        Image.network(
+                          _schedules[i].imagem ?? '',
+                          width: double.infinity,
+                          height: 400,
+                          fit: BoxFit.cover,
+                          errorBuilder: (BuildContext context, Object exception,
+                              StackTrace? stackTrace) {
+                            return Text("Erro ao buscar imagem");
+                          },
+                        ),
+                        const Divider(height: 10),
+                        TextButton(
+                            onPressed: () {
+                              _cancelar(_schedules[i].agendamentoId);
+                            },
+                            child: Text('Cancelar agendamento')
+                        )
+                      ],
                     )
-                  ],
                 )
-              )
             ),
           ),
-          ),
         ),
+      ),
     );
   }
 }

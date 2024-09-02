@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:tatuagem_front/DAO/TattooDAO.dart';
+import 'package:tatuagem_front/DAO/ScheduleDAO.dart';
+import 'package:tatuagem_front/Models/Schedule.dart';
 import 'package:tatuagem_front/screens/components/authenticate.dart';
 import 'package:tatuagem_front/screens/components/menu.dart';
 import 'package:tatuagem_front/screens/components/user_menu.dart';
@@ -18,18 +20,26 @@ class ArtistHome extends StatefulWidget {
 }
 
 class _ArtistHomeState extends State<ArtistHome> {
-  List<Tattoo> _tattoos = [];
+  List<Schedule> _tattoos = [];
 
   Future<void> _cancelScheduling(String tattooId) async {
-    /*TODO: Implementar cancelamento de agendamento*/
+    final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
+    ScheduleDAO dao = ScheduleDAO(tokenProvider: tokenProvider);
+    try {
+      await dao.delete(tattooId);
+      _refreshData();
+    } catch (e) {
+      Messenger.snackBar(context, 'Erro ao cancelar agendamento');
+    }
+
   }
 
   void _refreshData() async{
     final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
-    TattooDAO dao = TattooDAO(tokenProvider: tokenProvider);
+    ScheduleDAO dao = ScheduleDAO(tokenProvider: tokenProvider);
     var decoded = tokenProvider.decodedToken;
 
-    _tattoos = await dao.getAllByArtist('api/tatuagens/agendadas/artist');
+    _tattoos = await dao.getAllByArtistUser();
     setState(() {});
   }
 
@@ -39,7 +49,7 @@ class _ArtistHomeState extends State<ArtistHome> {
     _refreshData();
   }
 
-  @override
+   @override
   Widget build(BuildContext context) {
     return Authenticate(
       child: Scaffold(
@@ -82,7 +92,7 @@ class TatooCard extends StatelessWidget {
     required this.onCancel,
   });
 
-  final Tattoo tatoo;
+  final Schedule tatoo;
   final void Function(String tattooId) onCancel;
 
   @override
@@ -140,17 +150,14 @@ class TatooCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // const SizedBox(
-                  //   height: 50,
-                  // ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      IconButton(
-                        icon: const Icon(Icons.event_busy),
-                        color: Colors.red,
-                        onPressed: () => onCancel(tatoo.id!),
-                      ),
+                       IconButton(
+                      icon: const Icon(Icons.event_busy),
+                      color: Colors.red,
+                      onPressed: () => onCancel(tatoo.id!),
+                    ),
                     ],
                   )
                 ],
