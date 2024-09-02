@@ -23,12 +23,14 @@ class TattooDAO {
     return tattoos;
   }
 
-  Future<List<Tattoo>> getAllByArtist() async {
+  Future<List<Tattoo>> getAllByArtist(String url) async {
     final decodedToken = tokenProvider.decodedToken;
     final String artistId = decodedToken['tatuador']['id'];
 
+    String finalUrl = url + '/' + artistId;
+
     final List<Map<String, dynamic>> data = await ApiService.getAll(
-      'api/tatuagens/artist/$artistId',
+      finalUrl,
       headers: {'Authorization': 'Bearer ${await tokenProvider.token}'},
     );
 
