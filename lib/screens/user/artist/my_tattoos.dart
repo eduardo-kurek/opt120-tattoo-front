@@ -77,7 +77,7 @@ class _MyTattoosState extends State<MyTattoos> {
     TattooDAO dao = TattooDAO(tokenProvider: tokenProvider);
     var decoded = tokenProvider.decodedToken;
 
-    _tattoos = await dao.getAllByArtist();
+    _tattoos = await dao.getAllByArtist('api/tatuagens/artist');
     setState(() {});
   }
 
@@ -178,49 +178,37 @@ class _MyTattoosState extends State<MyTattoos> {
     _refreshData();
   }
 
-  @override
+   @override
   Widget build(BuildContext context) {
     return Authenticate(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Minhas Tattoos'),
+          title: const Text('Minhas Tatuagens'),
         ),
         drawer: const Menu(),
         body: Container(
           color: Colors.black87,
           padding: const EdgeInsets.all(15),
-          child: ListView.builder(
-            itemCount: _tattoos.length,
-            itemBuilder: (context, i) => Card(
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    ListTile(
-                      title: Text(_tattoos[i].estilo),
-                      subtitle: Text(_tattoos[i].preco.toStringAsFixed(2)),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            onPressed: (){_showModal(_tattoos[i].id);},
-                            icon: const Icon(Icons.edit)
-                          ),
-                          IconButton(
-                            onPressed: (){_delete(_tattoos[i].id);},
-                            icon: const Icon(Icons.delete),
-                            color: Colors.red,
-                          )
-                        ],
-                      ),
-                    ),
-                    const Divider(height: 10),
-                    Text(_tattoos[i].imagem)
-                  ],
-                )
-              ),
-            )
-          )
+          child: LayoutBuilder(builder: (context, constraints) {
+            // Calcula o número de colunas com base na largura da tela
+            int crossAxisCount = (constraints.maxWidth / 200).floor();
+            return GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: crossAxisCount, // Número de colunas
+                  crossAxisSpacing: 20.0,
+                  mainAxisSpacing: 20.0,
+                  childAspectRatio: 0.6, // Proporção do card (largura/altura)
+                ),
+                itemCount: _tattoos.length,
+                itemBuilder: (context, index) {
+                  final tatoo = _tattoos[index];
+                  return TatooCard(
+                    tatoo: tatoo,
+                    onEdit: (tattooId) => _showModal(tattooId),
+                    onDelete: (tattooId) => _delete(tattooId),
+                  );
+                });
+          }),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: (){_showModal(null);},
@@ -229,5 +217,113 @@ class _MyTattoosState extends State<MyTattoos> {
       ),
     );
   }
+}
 
+class TatooCard extends StatelessWidget {
+  const TatooCard({
+    super.key,
+    required this.tatoo,
+    required this.onEdit,
+    required this.onDelete,
+  });
+
+  final Tattoo tatoo;
+  final void Function(String tattooId) onEdit;
+  final void Function(String tattooId) onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    print('tatoo.imagem: ${tatoo.imagem}');
+    return Card(
+      elevation: 4.0,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Flexible(
+            flex: 1,
+            child: Image.network(
+              tatoo.imagem,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              errorBuilder: (BuildContext context, Object exception,
+                  StackTrace? stackTrace) {
+                return Placeholder();
+              },
+            ),
+          ),
+          Flexible(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'R\$ ${tatoo.preco.toString().replaceAll('.', ',')}',
+                      style: const TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text(
+                      'Tamanho: ${tatoo.tamanho.toString()} cm',
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text(
+                      'Estilo: ${tatoo.estilo}',
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ),
+                  // const SizedBox(
+                  //   height: 50,
+                  // ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                       IconButton(
+                      icon: const Icon(Icons.edit),
+                      color: Colors.blue,
+                      onPressed: () => onEdit(tatoo.id!),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete),
+                      color: Colors.red,
+                      onPressed: () => onDelete(tatoo.id!),
+                    ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: TextButton(
+                          onPressed: () {
+                            print('botão do card pressionado');
+                          },
+                          style: TextButton.styleFrom(
+                            backgroundColor:
+                                Colors.blue[900], // Define a cor de fundo
+                          ),
+                          child: const Text(
+                            "Agendar",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              )),
+        ],
+      ),
+    );
+  }
 }
