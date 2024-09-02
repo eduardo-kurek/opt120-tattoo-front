@@ -55,10 +55,10 @@ class _UserHomeState extends State<UserHome> {
                   children: [
                     ListTile(
                       title: Text(_schedules[i].id),
-                      subtitle: Text(_schedules[i].horario),
+                      subtitle: Text(_schedules[i].imagem),
                     ),
                     const Divider(height: 10),
-                    Text(_schedules[i].horario)
+                    Text(_schedules[i].id)
                   ],
                 )
               )

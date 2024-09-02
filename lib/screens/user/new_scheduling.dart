@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tatuagem_front/DAO/ScheduleDAO.dart';
 import 'package:tatuagem_front/DAO/TattooDAO.dart';
 import 'package:tatuagem_front/screens/components/authenticate.dart';
 import 'package:tatuagem_front/screens/components/menu.dart';
+import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
+
+import '../../../Models/Schedule.dart';
 import '../../../Models/Tattoo.dart';
 import '../../../utils/TokenProvider.dart';
 
@@ -15,6 +19,110 @@ class NewScheduling extends StatefulWidget {
 }
 
 class _NewSchedulingState extends State<NewScheduling> {
+  final TextEditingController _observacaoController = TextEditingController();
+  DateTime? _selectedDateTime;
+
+  Future<void> _confirmSchedule(Tattoo tattoo) async {
+    print(_selectedDateTime);
+    print(_observacaoController.text);
+    print(tattoo.id);
+    print(tattoo.tatuador_id);
+
+    // TODO
+    final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
+    final String user = tokenProvider.decodedToken['id'];
+
+    CreateScheduleDAO dao = CreateScheduleDAO(tokenProvider: tokenProvider);
+    CreateSchedule cs = CreateSchedule(
+      client_id: user,
+      tatuador_id: tattoo.tatuador_id,
+      observacao: _observacaoController.text,
+      data: _selectedDateTime!,
+    );
+
+    dao.create(cs);
+
+  }
+
+  void _schedule(Tattoo tattoo) {
+    String title = "Adicionar tatuagem";
+    String exit = "Cancelar";
+
+    showModalBottomSheet(
+      elevation: 5,
+      isScrollControlled: true,
+      context: context,
+      builder: (_) => Container(
+        padding: EdgeInsets.only(
+            top: 30, left: 15, right: 15,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 50
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Center(
+              child: Text(
+                title,
+                style: const TextStyle(fontSize: 20),
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _observacaoController,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+                  hintText: "Observação"
+              ),
+            ),
+            const SizedBox(height: 10),
+          TextButton(
+            onPressed: () async {
+              DateTime? pickedDateTime = await showOmniDateTimePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(2022),
+                lastDate: DateTime(2025),
+                is24HourMode: true,
+              );
+              if (pickedDateTime != null) {
+                _selectedDateTime = pickedDateTime;
+              }
+            },
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.blue[900],
+            ),
+            child: const Text(
+              "Selecionar Data e Hora",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          const SizedBox(height: 10),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text(
+              exit,
+              style: TextStyle(color: Colors.red),
+              ),
+            
+          ),
+          const SizedBox(height: 10),
+          TextButton(
+            onPressed: () {
+              _confirmSchedule(tattoo);
+            },
+            child: Text("Agendar Atendimento"),
+          ),
+          ],
+        ),
+      )
+    );
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +163,10 @@ class _NewSchedulingState extends State<NewScheduling> {
                         itemCount: tattoos?.length,
                         itemBuilder: (context, index) {
                           final tatoo = tattoos?[index];
-                          if (tatoo != null) return TatooCard(tatoo: tatoo);
+                          if (tatoo != null) return TatooCard(
+                            tatoo: tatoo,
+                            onSchedule: (tatoo) => _schedule(tatoo),
+                            );
                           return const Text('Sem dados');
                         });
                   }),
@@ -72,9 +183,11 @@ class TatooCard extends StatelessWidget {
   const TatooCard({
     super.key,
     required this.tatoo,
+    required this.onSchedule,
   });
 
   final Tattoo tatoo;
+  final void Function(Tattoo tattoo) onSchedule;
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +252,7 @@ class TatooCard extends StatelessWidget {
                             horizontal: 8.0, vertical: 8.0),
                         child: TextButton(
                           onPressed: () {
-                            print('botão do card pressionado');
+                            onSchedule(tatoo);
                           },
                           style: TextButton.styleFrom(
                             backgroundColor:
