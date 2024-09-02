@@ -15,48 +15,53 @@ class NewScheduling extends StatefulWidget {
 }
 
 class _NewSchedulingState extends State<NewScheduling> {
-  List<Tattoo> _tattoos = [];
-
-  void _refreshData() async {
-    final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
-    TattooDAO dao = TattooDAO(tokenProvider: tokenProvider);
-
-    _tattoos = await dao.getAll();
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _refreshData();
-  }
 
   @override
   Widget build(BuildContext context) {
+    final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
+    TattooDAO dao = TattooDAO(tokenProvider: tokenProvider);
+
     return Authenticate(
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Novo agendamento'),
         ),
         drawer: const Menu(),
-        body: Container(
-          color: Colors.black87,
-          padding: const EdgeInsets.all(15),
-          child: LayoutBuilder(builder: (context, constraints) {
-            int crossAxisCount = (constraints.maxWidth / 200).floor();
-            return GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: crossAxisCount > 0 ? crossAxisCount : 1, // Número de colunas
-                  crossAxisSpacing: 20.0,
-                  mainAxisSpacing: 20.0,
-                  childAspectRatio: 0.6, // Proporção do card (largura/altura)
-                ),
-                itemCount: _tattoos.length,
-                itemBuilder: (context, index) {
-                  final tatoo = _tattoos[index];
-                  return TatooCard(tatoo: tatoo);
-                });
-          }),
+        body: FutureBuilder<List<Tattoo>>(
+          future: dao.getAll(), // Chama a função que retorna o Future
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              // Exibe o loading enquanto espera a resposta
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              // Exibe uma mensagem de erro se ocorrer algum problema
+              return Center(child: Text('Erro: ${snapshot.error}'));
+            } else {
+              // Exibe os dados quando a requisição é completada com sucesso
+              var tattoos = snapshot.data;
+              return        
+                Container(
+                  color: Colors.black87,
+                  padding: const EdgeInsets.all(15),
+                  child: LayoutBuilder(builder: (context, constraints) {
+                    int crossAxisCount = (constraints.maxWidth / 200).floor();
+                    return GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount > 0 ? crossAxisCount : 1, // Número de colunas
+                          crossAxisSpacing: 20.0,
+                          mainAxisSpacing: 20.0,
+                          childAspectRatio: 0.6, // Proporção do card (largura/altura)
+                        ),
+                        itemCount: tattoos?.length,
+                        itemBuilder: (context, index) {
+                          final tatoo = tattoos?[index];
+                          if (tatoo != null) return TatooCard(tatoo: tatoo);
+                          return const Text('Sem dados');
+                        });
+                  }),
+                );
+            }
+          },
         ),
       ),
     );
