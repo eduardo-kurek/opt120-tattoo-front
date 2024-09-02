@@ -44,18 +44,22 @@ class _NewSchedulingState extends State<NewScheduling> {
         body: Container(
           color: Colors.black87,
           padding: const EdgeInsets.all(15),
-          child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 7, // Número de colunas
-                crossAxisSpacing: 8.0,
-                mainAxisSpacing: 8.0,
-                childAspectRatio: 0.7, // Proporção do card (largura/altura)
-              ),
-              itemCount: _tattoos.length,
-              itemBuilder: (context, index) {
-                final tatoo = _tattoos[index];
-                return TatooCard(tatoo: tatoo);
-              }),
+          child: LayoutBuilder(builder: (context, constraints) {
+            // Calcula o número de colunas com base na largura da tela
+            int crossAxisCount = (constraints.maxWidth / 200).floor();
+            return GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: crossAxisCount, // Número de colunas
+                  crossAxisSpacing: 20.0,
+                  mainAxisSpacing: 20.0,
+                  childAspectRatio: 0.6, // Proporção do card (largura/altura)
+                ),
+                itemCount: _tattoos.length,
+                itemBuilder: (context, index) {
+                  final tatoo = _tattoos[index];
+                  return TatooCard(tatoo: tatoo);
+                });
+          }),
         ),
       ),
     );
@@ -72,72 +76,86 @@ class TatooCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('tatoo.imagem: ${tatoo.imagem}');
     return Card(
       elevation: 4.0,
-      child: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.network(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Flexible(
+            flex: 1,
+            child: Image.network(
               tatoo.imagem,
               width: double.infinity,
-              height: 200.0,
               fit: BoxFit.cover,
+              errorBuilder: (BuildContext context, Object exception,
+                  StackTrace? stackTrace) {
+                return Placeholder();
+              },
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'R\$ ${tatoo.preco.toString().replaceAll('.', ',')}',
-                style: const TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Text(
-                'Tamanho: ${tatoo.tamanho.toString()} cm',
-                style: TextStyle(
-                  fontSize: 14.0,
-                  color: Colors.grey[600],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Text(
-                'Estilo: ${tatoo.estilo}',
-                style: TextStyle(
-                  fontSize: 14.0,
-                  color: Colors.grey[600],
-                ),
-              ),
-            ),
-            const SizedBox(height: 50,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: TextButton(
-                    onPressed: () {
-                      print('botão do card pressionado');
-                    },
-                    style: TextButton.styleFrom(
-                      backgroundColor:
-                          Colors.blue[900], // Define a cor de fundo
-                    ),
-                    child: const Text(
-                      "Agendar",
-                      style: TextStyle(color: Colors.white),
+          ),
+          Flexible(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'R\$ ${tatoo.preco.toString().replaceAll('.', ',')}',
+                      style: const TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                )
-              ],
-            )
-          ],
-        ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text(
+                      'Tamanho: ${tatoo.tamanho.toString()} cm',
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text(
+                      'Estilo: ${tatoo.estilo}',
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ),
+                  // const SizedBox(
+                  //   height: 50,
+                  // ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: TextButton(
+                          onPressed: () {
+                            print('botão do card pressionado');
+                          },
+                          style: TextButton.styleFrom(
+                            backgroundColor:
+                                Colors.blue[900], // Define a cor de fundo
+                          ),
+                          child: const Text(
+                            "Agendar",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              )),
+        ],
       ),
     );
   }
