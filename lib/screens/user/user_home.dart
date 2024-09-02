@@ -29,6 +29,15 @@ class _UserHomeState extends State<UserHome> {
     setState(() {});
   }
 
+  void _cancelar(String agendamentoId) async{
+    final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
+    ScheduleDAO dao = ScheduleDAO(tokenProvider: tokenProvider);
+
+    await dao.delete(agendamentoId);
+
+    _refreshData();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -40,7 +49,7 @@ class _UserHomeState extends State<UserHome> {
     return Authenticate(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Home Page'),
+          title: const Text('Agendamentos realizados'),
         ),
         drawer: const Menu(),
         body: Container(
@@ -54,11 +63,27 @@ class _UserHomeState extends State<UserHome> {
                 child: Column(
                   children: [
                     ListTile(
-                      title: Text(_schedules[i].id),
-                      subtitle: Text(_schedules[i].horario),
+                      title: Text(_schedules[i].estilo ?? 'Estilo'),
+                      subtitle: Text(_schedules[i].preco?.toStringAsFixed(2) ?? 'Preço'),
                     ),
                     const Divider(height: 10),
-                    Text(_schedules[i].horario)
+                    Image.network(
+                      _schedules[i].imagem ?? '',
+                      width: double.infinity,
+                      height: 400,
+                      fit: BoxFit.cover,
+                      errorBuilder: (BuildContext context, Object exception,
+                          StackTrace? stackTrace) {
+                        return Text("Erro ao buscar imagem");
+                      },
+                    ),
+                    const Divider(height: 10),
+                    TextButton(
+                        onPressed: () {
+                          _cancelar(_schedules[i].agendamentoId);
+                        },
+                        child: Text('Cancelar agendamento')
+                    )
                   ],
                 )
               )
