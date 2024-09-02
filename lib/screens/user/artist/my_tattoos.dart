@@ -80,7 +80,7 @@ class _MyTattoosState extends State<MyTattoos> {
     TattooDAO dao = TattooDAO(tokenProvider: tokenProvider);
     var decoded = tokenProvider.decodedToken;
 
-    _tattoos = await dao.getAllByArtist();
+    _tattoos = await dao.getAllByArtist('api/tatuagens/artist');
     setState(() {});
   }
 
