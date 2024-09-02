@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tatuagem_front/screens/login.dart';
-import 'package:tatuagem_front/screens/user/home.dart';
+import 'package:tatuagem_front/screens/user/user_home.dart';
 import 'package:tatuagem_front/utils/TokenProvider.dart';
 
 class MyApp extends StatelessWidget {
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     if (isLogged) {
       return const MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: HomePage(),
+        home: UserHome(),
       );
     }
 
