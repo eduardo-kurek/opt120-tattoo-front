@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:provider/provider.dart';
+import 'package:tatuagem_front/screens/user/artist/artist_home.dart';
 
 import 'package:tatuagem_front/services/Api.dart';
 import 'package:tatuagem_front/utils/Messenger.dart';
@@ -28,18 +30,24 @@ class _LoginState extends State<Login> {
         'senha': _passwordController.text
       });
 
-
       if (data['statusCode'] == 200) {
         setToken(data['body']['token']);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => UserHome()),
-        );
+        if(JwtDecoder.decode(data['body']['token'])['tatuador'] == null){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => UserHome()),
+          );
+        }else{
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ArtistHome()),
+          );
+        }
       }
 
       /* Messenger.snackBar(context, data["message"]); */
     } catch (e) {
-      Map<String, dynamic> data = jsonDecode(e.toString().replaceFirst('Exception: ', ''));
+      print(e);
       Messenger.snackBar(context, "Credenciais inválidas");
     }
   }
