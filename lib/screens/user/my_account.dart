@@ -49,6 +49,7 @@ class _MyAccountState extends State<MyAccount> {
     final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
     _token = await tokenProvider.token;
     final decodedToken = tokenProvider.decodedToken;
+    print(decodedToken);
     _userId = decodedToken['id'];
     _fetchUserData();
   }
