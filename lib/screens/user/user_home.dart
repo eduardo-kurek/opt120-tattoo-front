@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tatuagem_front/DAO/ScheduleDAO.dart';
 import 'package:tatuagem_front/DAO/TattooDAO.dart';
+import 'package:tatuagem_front/Models/Schedule.dart';
 import 'package:tatuagem_front/Models/Tattoo.dart';
 import 'package:tatuagem_front/screens/components/authenticate.dart';
 import 'package:tatuagem_front/screens/components/menu.dart';
@@ -15,14 +17,15 @@ class UserHome extends StatefulWidget {
 }
 
 class _UserHomeState extends State<UserHome> {
-  List<Tattoo> _tattoos = [];
+  List<Schedule> _schedules = [];
 
   void _refreshData() async {
     final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
-    TattooDAO dao = TattooDAO(tokenProvider: tokenProvider);
+    ScheduleDAO dao = ScheduleDAO(tokenProvider: tokenProvider);
     var decoded = tokenProvider.decodedToken;
+    final String id = decoded['id'];
 
-    _tattoos = await dao.getAll();
+    _schedules = await dao.getAllByUserId(id);
     setState(() {});
   }
 
@@ -43,17 +46,26 @@ class _UserHomeState extends State<UserHome> {
         body: Container(
           color: Colors.black87,
           padding: const EdgeInsets.all(50),
-          child: const Center(
-              child: Card(
-            child: Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [Text("Conteudo aqui...")]),
+          child: ListView.builder(
+            itemCount: _schedules.length,
+            itemBuilder: (context, i) => Card(
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: Text(_schedules[i].id),
+                      subtitle: Text(_schedules[i].horario),
+                    ),
+                    const Divider(height: 10),
+                    Text(_schedules[i].horario)
+                  ],
+                )
+              )
             ),
-          )),
+          ),
+          ),
         ),
-      ),
     );
   }
 }
