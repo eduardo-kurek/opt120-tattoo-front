@@ -23,9 +23,7 @@ class _UserHomeState extends State<UserHome> {
     final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
     ScheduleDAO dao = ScheduleDAO(tokenProvider: tokenProvider);
     var decoded = tokenProvider.decodedToken;
-    final String id = decoded['id'];
-
-    _schedules = await dao.getAllByUserId(id);
+    _schedules = await dao.getAllLoggedUser();
     setState(() {});
   }
 
