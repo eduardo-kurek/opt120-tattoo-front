@@ -5,6 +5,7 @@ import 'package:tatuagem_front/Models/Schedule.dart';
 import 'package:tatuagem_front/services/Api.dart';
 
 import '../Models/Tattoo.dart';
+import '../Models/Utils.dart';
 import '../utils/TokenProvider.dart';
 
 class ScheduleDAO {
@@ -13,7 +14,7 @@ class ScheduleDAO {
   ScheduleDAO({required this.tokenProvider});
 
   // Obtém todos os agendamentos de um usuário
-  Future<List<Schedule>> getAllLoggedUser() async {
+  Future<List<Utils>> getAllLoggedUser() async {
     // return [
     //   Schedule(
     //     id: '1',
@@ -55,10 +56,40 @@ class ScheduleDAO {
 
     final List<Schedule> schedules = data.map((map) => Schedule.fromJson(map))
         .toList();
-    return schedules;
+
+    List<Utils> utils = [];
+
+    for (var schedule in schedules) {
+      print(schedule.tatuagem_id);
+      final tattooData = await ApiService.get(
+        'api/tatuagens/${schedule.tatuagem_id}',
+        headers: {'Authorization': 'Bearer ${await tokenProvider.token}'},
+      );
+
+      final tattoo = Tattoo.fromJson(tattooData);
+      
+      final util = Utils(
+        agendamento_id: schedule.id,
+        client_id: schedule.client_id,
+        tatuador_id: schedule.tatuador_id,
+        tatuagem_id: schedule.tatuagem_id,
+        observacao: schedule.observacao,
+        imagem: tattoo.imagem,
+        estilo: tattoo.estilo,
+        data_inicio: schedule.data_inicio,
+        preco: tattoo.preco,
+        // tamanho: tattoo.tamanho,
+        duracao: schedule.duracao,
+      );
+
+      utils.add(util);
+    }
+
+    // return schedules;
+    return utils;
   }
 
-  Future<List<Schedule>> getAllByArtistUser() async {
+  Future<List<Utils>> getAllByArtistUser() async {
     // return [
     //   Schedule(
     //     id: '1',
@@ -101,7 +132,37 @@ class ScheduleDAO {
 
     final List<Schedule> schedules = data.map((map) => Schedule.fromJson(map))
         .toList();
-    return schedules;
+    
+    List<Utils> utils = [];
+
+    for (var schedule in schedules) {
+      final tattooData = await ApiService.get(
+        'api/tatuagens/${schedule.tatuagem_id}',
+        headers: {'Authorization': 'Bearer ${await tokenProvider.token}'},
+      );
+
+      final tattoo = Tattoo.fromJson(tattooData);
+      
+      final util = Utils(
+        agendamento_id: schedule.id,
+        client_id: schedule.client_id,
+        tatuador_id: schedule.tatuador_id,
+        tatuagem_id: schedule.tatuagem_id,
+        observacao: schedule.observacao,
+        imagem: tattoo.imagem,
+        estilo: tattoo.estilo,
+        data_inicio: schedule.data_inicio,
+        preco: tattoo.preco,
+        // tamanho: tattoo.tamanho,
+        duracao: schedule.duracao,
+      );
+
+      utils.add(util);
+    }
+
+    return utils;
+
+    // return schedules;
   }
 
   Future<String> create(String tatuadorId, String tatuagemId, String dataInicio, String observacao) async {

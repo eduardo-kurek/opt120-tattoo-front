@@ -4,6 +4,7 @@ import 'package:tatuagem_front/DAO/ScheduleDAO.dart';
 import 'package:tatuagem_front/DAO/TattooDAO.dart';
 import 'package:tatuagem_front/Models/Schedule.dart';
 import 'package:tatuagem_front/Models/Tattoo.dart';
+import 'package:tatuagem_front/Models/Utils.dart';
 import 'package:tatuagem_front/screens/components/authenticate.dart';
 import 'package:tatuagem_front/screens/components/menu.dart';
 import 'package:tatuagem_front/screens/components/user_menu.dart';
@@ -17,7 +18,7 @@ class UserHome extends StatefulWidget {
 }
 
 class _UserHomeState extends State<UserHome> {
-  List<Schedule> _schedules = [];
+  List<Utils> _schedules = [];
 
   void _refreshData() async {
     final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
@@ -63,6 +64,11 @@ class _UserHomeState extends State<UserHome> {
                         ListTile(
                           title: Text(_schedules[i].estilo ?? 'Estilo'),
                           subtitle: Text(_schedules[i].preco?.toStringAsFixed(2) ?? 'Preço'),
+                        ),
+                        ListTile(
+                          title: Text(_schedules[i].data_inicio ?? 'Data de início'),
+                          subtitle: Text(_schedules[i].duracao != ''?
+                          '${_schedules[i].duracao.toString()} minutos' : 'Data de término') ,
                         ),
                         const Divider(height: 10),
                         Image.network(
