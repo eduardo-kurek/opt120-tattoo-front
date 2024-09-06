@@ -30,18 +30,15 @@ class _ArtistHomeState extends State<ArtistHome> {
   }
 
   void _cancelar(String agendamentoId) async{
-    // final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
-    // ScheduleDAO dao = ScheduleDAO(tokenProvider: tokenProvider);
-
-    // await dao.delete(agendamentoId);
-
-    print(agendamentoId);
-
+    final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
+    ScheduleDAO dao = ScheduleDAO(tokenProvider: tokenProvider);
+    await dao.delete(agendamentoId);
     _refreshData();
   }
 
   String _formatDate(String date) {
-    final DateTime dateTime = DateTime.parse(date);
+    // converter para TimeZone local (Brasília)
+    final DateTime dateTime = DateTime.parse(date).toLocal();
     final DateFormat formatter = DateFormat('dd/MM/yyyy HH:mm');
     return formatter.format(dateTime);
   }
