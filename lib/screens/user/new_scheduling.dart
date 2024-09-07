@@ -53,7 +53,6 @@ class _NewSchedulingState extends State<NewScheduling> {
     );
 
     try {
-      // Criando o agendamento
       final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
       ScheduleDAO dao = ScheduleDAO(tokenProvider: tokenProvider);
       await dao.create(

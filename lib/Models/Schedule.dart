@@ -1,51 +1,75 @@
 // classe para buscar agendamentos
 class Schedule{
-   String id;
-  double preco;
-  String imagem;
-  int tamanho;
-  String cor;
-  String estilo;
+  String client_id;
+  int duracao;
+  String status;
+  String observacao;  
+  String data_inicio;
   String data_criacao;
   String data_atualizacao;
-  String data_exclusao;
-  String client_id;
-  String agendamento_id;
+  String data_cancelamento;
+  String id;
   String tatuador_id;
-  String criado_por;
+  String servico_id;
+  String data_termino;
+  String estudio_id;
+  String tatuagem_id;
+  // double preco;
+  // String imagem;
+  // int tamanho;
+  // String cor;
+  // String estilo;
+  // String agendamento_id;
+  // String criado_por;
 
 
   Schedule({
-    required this.imagem,
-    required this.preco,
-    this.id = '',
-    this.tamanho = 0,
-    this.cor = '',
-    this.estilo = '',
-    this.data_criacao = '',
-    this.data_atualizacao = '',
-    this.data_exclusao = '',
-    this.client_id = '',
-    this.agendamento_id = '',
-    this.tatuador_id = '',
-    this.criado_por = '',
+    required this.client_id,
+    required this.duracao,
+    required this.status,
+    required this.observacao,
+    required this.data_inicio,
+    required this.data_criacao,
+    required this.data_atualizacao,
+    required this.data_cancelamento,
+    required this.id,
+    required this.tatuador_id,
+    required this.servico_id,
+    required this.data_termino,
+    required this.estudio_id,
+    required this.tatuagem_id,
+    // required this.preco,
+    // required this.imagem,
+    // required this.tamanho,
+    // required this.cor,
+    // required this.estilo,
+    // required this.agendamento_id,
+    // required this.criado_por,
   });
 
   factory Schedule.fromJson(Map<String, dynamic> json) {
     return Schedule(
-      imagem: json['imagem'] ?? '',
-      preco: json['preco']?.toDouble() ?? 0.0,
-      id: json['id'] ?? '',
-      tamanho: json['tamanho'] ?? 0,
-      cor: json['cor'] ?? '',
-      estilo: json['estilo'] ?? '',
+      client_id: json['client_id'] ?? '',
+      duracao: json['duracao'] ?? 0,
+      status: json['status'] ?? '',
+      observacao: json['observacao'] ?? '',
+      data_inicio: json['data_inicio'] ?? '',
       data_criacao: json['data_criacao'] ?? '',
       data_atualizacao: json['data_atualizacao'] ?? '',
-      data_exclusao: json['data_exclusao'] ?? '',
-      client_id: json['client_id'] ?? '',
-      agendamento_id: json['agendamento_id'] ?? '',
+      data_cancelamento: json['data_cancelamento'] ?? '',
+      id: json['id'] ?? '',
       tatuador_id: json['tatuador_id'] ?? '',
-      criado_por: json['criado_por'] ?? '',
+      servico_id: json['servico_id'] ?? '',
+      data_termino: json['data_termino']  ?? '',
+      estudio_id: json['estudio_id'] ?? '',
+      tatuagem_id: json['tatuagem_id'] ?? '',
+      // preco: json['preco'],
+      // imagem: json['imagem'],
+      // tamanho: json['tamanho'],
+      // cor: json['cor'],
+      // estilo: json['estilo'],
+      // agendamento_id: json['agendamento_id'],
+      // criado_por: json['criado_por'],
     );
   }
 }
