@@ -13,156 +13,90 @@ class ScheduleDAO {
 
   ScheduleDAO({required this.tokenProvider});
 
-  // Obtém todos os agendamentos de um usuário
+Future<List<Schedule>> _getSchedules(String endpoint) async {
+  final List<Map<String, dynamic>> data = await ApiService.getAll(
+    endpoint,
+    headers: {'Authorization': 'Bearer ${await tokenProvider.token}'},
+  );
+
+  return data.map((map) => Schedule.fromJson(map)).toList();
+}
+
+Future<Tattoo> _getTattoo(String tattooId) async {
+  final tattooData = await ApiService.get(
+    'api/tatuagens/$tattooId',
+    headers: {'Authorization': 'Bearer ${await tokenProvider.token}'},
+  );
+
+  return Tattoo.fromJson(tattooData);
+}
+
+Future<Map<String, dynamic>> _getUser(String userId) async {
+
+  final decodedToken = tokenProvider.decodedToken;
+  final String id = decodedToken['id'];
+  print('api/usuarios/perfil/$id');
+
+  return await ApiService.get(
+    'api/usuarios/perfil/$id',
+    headers: {'Authorization': 'Bearer ${await tokenProvider.token}'},
+  );
+}
+
+Future<Map<String, dynamic>> _getTatuador(String tatuadorId) async {
+  return await ApiService.get(
+    'api/tatuadores/$tatuadorId',
+    headers: {'Authorization': 'Bearer ${await tokenProvider.token}'},
+  );
+}
+
+Future<Utils> _createUtils(Schedule schedule) async {
+  final tattoo = await _getTattoo(schedule.tatuagem_id);
+
+  final user = await _getUser(schedule.client_id);
+  final tatuador = await _getTatuador(schedule.tatuador_id);
+
+  return Utils(
+    agendamento_id: schedule.id,
+    client_id: schedule.client_id,
+    client_name: user['nome'],
+    tatuador_id: schedule.tatuador_id,
+    tatuador_name: tatuador['nome'],
+    tatuagem_id: schedule.tatuagem_id,
+    observacao: schedule.observacao,
+    imagem: tattoo.imagem,
+    estilo: tattoo.estilo,
+    data_inicio: schedule.data_inicio,
+    preco: tattoo.preco,
+    duracao: schedule.duracao,
+  );
+}
+
   Future<List<Utils>> getAllLoggedUser() async {
-    // return [
-    //   Schedule(
-    //     id: '1',
-    //     preco: 150.00,
-    //     imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7pXAZGiCXpYCBRyKB_-EHWZOGL7VI6tjWRg&s',
-    //     tamanho: 20,
-    //     cor: 'Preto',
-    //     estilo: 'Old School',
-    //     data_criacao: '2024-09-01T12:00:00Z',
-    //     data_atualizacao: '2024-09-02T12:00:00Z',
-    //     data_exclusao: '',
-    //     client_id: 'cliente1',
-    //     agendamento_id: 'agendamento1',
-    //     tatuador_id: 'tatuador1',
-    //     criado_por: 'user1',
-    //   ),
-    //   Schedule(
-    //     id: '2',
-    //     preco: 200.00,
-    //     imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7pXAZGiCXpYCBRyKB_-EHWZOGL7VI6tjWRg&s',
-    //     tamanho: 30,
-    //     cor: 'Azul',
-    //     estilo: 'Realismo',
-    //     data_criacao: '2024-08-15T09:00:00Z',
-    //     data_atualizacao: '2024-08-16T09:00:00Z',
-    //     data_exclusao: '',
-    //     client_id: 'cliente2',
-    //     agendamento_id: 'agendamento2',
-    //     tatuador_id: 'tatuador2',
-    //     criado_por: 'user2',
-    //   ),
-    // ];
-    final decodedToken = tokenProvider.decodedToken;
-
-    final List<Map<String, dynamic>> data = await ApiService.getAll(
-      'api/agendamentos-usuario',
-      headers: {'Authorization': 'Bearer ${await tokenProvider.token}'},
-    );
-
-    final List<Schedule> schedules = data.map((map) => Schedule.fromJson(map))
-        .toList();
+    final List<Schedule> schedules = await _getSchedules('api/agendamentos-usuario');
 
     List<Utils> utils = [];
 
     for (var schedule in schedules) {
-      print(schedule.tatuagem_id);
-      final tattooData = await ApiService.get(
-        'api/tatuagens/${schedule.tatuagem_id}',
-        headers: {'Authorization': 'Bearer ${await tokenProvider.token}'},
-      );
-
-      final tattoo = Tattoo.fromJson(tattooData);
-      
-      final util = Utils(
-        agendamento_id: schedule.id,
-        client_id: schedule.client_id,
-        tatuador_id: schedule.tatuador_id,
-        tatuagem_id: schedule.tatuagem_id,
-        observacao: schedule.observacao,
-        imagem: tattoo.imagem,
-        estilo: tattoo.estilo,
-        data_inicio: schedule.data_inicio,
-        preco: tattoo.preco,
-        // tamanho: tattoo.tamanho,
-        duracao: schedule.duracao,
-      );
-
-      utils.add(util);
+      utils.add(await _createUtils(schedule));
     }
 
-    // return schedules;
     return utils;
   }
 
   Future<List<Utils>> getAllByArtistUser() async {
-    // return [
-    //   Schedule(
-    //     id: '1',
-    //     preco: 170.00,
-    //     imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7pXAZGiCXpYCBRyKB_-EHWZOGL7VI6tjWRg&s',
-    //     tamanho: 20,
-    //     cor: 'Preto',
-    //     estilo: 'Old School',
-    //     data_criacao: '2024-09-01T12:00:00Z',
-    //     data_atualizacao: '2024-09-02T12:00:00Z',
-    //     data_exclusao: '',
-    //     client_id: 'cliente1',
-    //     agendamento_id: 'agendamento1',
-    //     tatuador_id: 'tatuador1',
-    //     criado_por: 'user1',
-    //   ),
-    //   Schedule(
-    //     id: '2',
-    //     preco: 200.00,
-    //     imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7pXAZGiCXpYCBRyKB_-EHWZOGL7VI6tjWRg&s',
-    //     tamanho: 30,
-    //     cor: 'Azul',
-    //     estilo: 'Realismo',
-    //     data_criacao: '2024-08-15T09:00:00Z',
-    //     data_atualizacao: '2024-08-16T09:00:00Z',
-    //     data_exclusao: '',
-    //     client_id: 'cliente2',
-    //     agendamento_id: 'agendamento2',
-    //     tatuador_id: 'tatuador2',
-    //     criado_por: 'user2',
-    //   ),
-    // ];
     final decodedToken = tokenProvider.decodedToken;
     final String artistId = decodedToken['tatuador']['id'];
 
-    final List<Map<String, dynamic>> data = await ApiService.getAll(
-      'api/agendamentos-tatuador/$artistId',
-      headers: {'Authorization': 'Bearer ${await tokenProvider.token}'},
-    );
-
-    final List<Schedule> schedules = data.map((map) => Schedule.fromJson(map))
-        .toList();
+    final List<Schedule> schedules = await _getSchedules('api/agendamentos-tatuador/$artistId');
     
     List<Utils> utils = [];
 
     for (var schedule in schedules) {
-      final tattooData = await ApiService.get(
-        'api/tatuagens/${schedule.tatuagem_id}',
-        headers: {'Authorization': 'Bearer ${await tokenProvider.token}'},
-      );
-
-      final tattoo = Tattoo.fromJson(tattooData);
-      
-      final util = Utils(
-        agendamento_id: schedule.id,
-        client_id: schedule.client_id,
-        tatuador_id: schedule.tatuador_id,
-        tatuagem_id: schedule.tatuagem_id,
-        observacao: schedule.observacao,
-        imagem: tattoo.imagem,
-        estilo: tattoo.estilo,
-        data_inicio: schedule.data_inicio,
-        preco: tattoo.preco,
-        // tamanho: tattoo.tamanho,
-        duracao: schedule.duracao,
-      );
-
-      utils.add(util);
+      utils.add(await _createUtils(schedule));
     }
 
     return utils;
-
-    // return schedules;
   }
 
   Future<String> create(String tatuadorId, String tatuagemId, String dataInicio, String observacao) async {
@@ -203,12 +137,8 @@ class ScheduleDAO {
         headers: {'Authorization': 'Bearer ${await tokenProvider.token}'},
       );
 
-      // Converte a string para List<String>
       List<dynamic> jsonList = jsonDecode(data['message']);
       List<String> ret = jsonList.map((item) => item as String).toList();
-
-      //print("rota usada: api/disponibilidade-tatuador/$artistId?dia_consulta=$formattedDate");
-      //print("dados recebidos: $ret");
 
       return ret;
     }catch(e){
@@ -262,10 +192,6 @@ class CreateScheduleDAO {
   }
 
   Future<void> update(tattoo, tattoId) async {
-    // TODO
-  }
-
-  Future<void> delete(String tattooId) async {
     // TODO
   }
 }

@@ -10,6 +10,8 @@ import 'package:tatuagem_front/screens/components/menu.dart';
 import 'package:tatuagem_front/screens/components/user_menu.dart';
 import 'package:tatuagem_front/utils/TokenProvider.dart';
 import 'package:intl/intl.dart';
+import 'package:tatuagem_front/screens/components/tatooInfoDialog.dart';
+
 class UserHome extends StatefulWidget {
   const UserHome({super.key});
 
@@ -79,10 +81,6 @@ class _UserHomeState extends State<UserHome> {
                 });
           }),
         ),
-        // floatingActionButton: FloatingActionButton(
-        //   onPressed: (){_showModal(null);},
-        //   child: const Icon(Icons.add),
-        // ),
       ),
     );
   }
@@ -99,6 +97,18 @@ class TatooCard extends StatelessWidget {
   final Utils schedule;
   final void Function(String tattooId) onDelete;
   final String Function(String date) formatDate;
+
+  void _showMoreInfo(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return TattooInfoDialog(
+          schedule: schedule,
+          formatDate: formatDate,
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,19 +164,6 @@ class TatooCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  //   child: Text(
-                  //     'Estilo: ${schedule.estilo}',
-                  //     style: TextStyle(
-                  //       fontSize: 14.0,
-                  //       color: Colors.grey[600],
-                  //     ),
-                  //   ),
-                  // ),
-                  // const SizedBox(
-                  //   height: 50,
-                  // ),
                  Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -184,7 +181,11 @@ class TatooCard extends StatelessWidget {
                       ),
                     ),
                     ],
-                  )
+                  ),
+                  IconButton(
+                        icon: const Icon(Icons.info_outline, color: Colors.blue),
+                        onPressed: () => _showMoreInfo(context),
+                      ),
                 ],
               )),
         ],
@@ -192,58 +193,3 @@ class TatooCard extends StatelessWidget {
     );
   }
 }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Authenticate(
-  //     child: Scaffold(
-  //       appBar: AppBar(
-  //         title: const Text('Agendamentos realizados'),
-  //       ),
-  //       drawer: const Menu(),
-  //       body: Container(
-  //         color: Colors.black87,
-  //         padding: const EdgeInsets.all(50),
-  //         child: ListView.builder(
-  //           itemCount: _schedules.length,
-  //           itemBuilder: (context, i) => Card(
-  //               child: Padding(
-  //                   padding: const EdgeInsets.all(10),
-  //                   child: Column(
-  //                     children: [
-  //                       ListTile(
-  //                         title: Text(_schedules[i].estilo ?? 'Estilo'),
-  //                         subtitle: Text(_schedules[i].preco?.toStringAsFixed(2) ?? 'Preço'),
-  //                       ),
-  //                       ListTile(
-  //                         title: Text(_schedules[i].data_inicio ?? 'Data de início'),
-  //                         subtitle: Text(_schedules[i].duracao != ''?
-  //                         '${_schedules[i].duracao.toString()} minutos' : 'Data de término') ,
-  //                       ),
-  //                       const Divider(height: 10),
-  //                       Image.network(
-  //                         _schedules[i].imagem ?? '',
-  //                         width: double.infinity,
-  //                         height: 400,
-  //                         fit: BoxFit.cover,
-  //                         errorBuilder: (BuildContext context, Object exception,
-  //                             StackTrace? stackTrace) {
-  //                           return Text("Erro ao buscar imagem");
-  //                         },
-  //                       ),
-  //                       const Divider(height: 10),
-  //                       TextButton(
-  //                           onPressed: () {
-  //                             _cancelar(_schedules[i].agendamento_id);
-  //                           },
-  //                           child: Text('Cancelar agendamento')
-  //                       )
-  //                     ],
-  //                   )
-  //               )
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
