@@ -182,10 +182,13 @@ class TatooCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    IconButton(
+                    Tooltip(
+                      message: 'Mais Informações',
+                      child: IconButton(
                         icon: const Icon(Icons.info_outline, color: Colors.blue),
                         onPressed: () => _showMoreInfo(context)
                       ),
+                    ),
                     ],
                   )
                 ],

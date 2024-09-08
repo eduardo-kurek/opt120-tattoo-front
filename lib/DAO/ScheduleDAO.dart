@@ -62,7 +62,7 @@ Future<Utils> _createUtils(Schedule schedule) async {
     client_name: user['nome'],
     tatuador_id: schedule.tatuador_id,
     tatuador_name: tatuador['nome'],
-    endereco_atendimento: tatuador['endereco_atendimento'],
+    endereco_atendimento: tatuador['endereco_atendimento'] ?? '',
     tatuagem_id: schedule.tatuagem_id,
     observacao: schedule.observacao,
     imagem: tattoo.imagem,
