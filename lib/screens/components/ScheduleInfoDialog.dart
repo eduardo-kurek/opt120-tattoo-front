@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:tatuagem_front/Models/Utils.dart';
 import 'package:intl/intl.dart';
 
-class TattooInfoDialog extends StatelessWidget {
+class ScheduleInfoDialog extends StatelessWidget {
   final Utils schedule;
   final String Function(String date) formatDate;
 
-  const TattooInfoDialog({
+  const ScheduleInfoDialog({
     Key? key,
     required this.schedule,
     required this.formatDate,
@@ -15,7 +15,7 @@ class TattooInfoDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Informações da Tatuagem'),
+      title: Text('Informações do Agendamento'),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -25,6 +25,7 @@ class TattooInfoDialog extends StatelessWidget {
           Text('Preço: R\$ ${schedule.preco.toString().replaceAll('.', ',')}'),
           Text('Duração: ${schedule.duracao} minutos'),
           Text('Tatuador: ${schedule.tatuador_name}'),
+          Text('Endereço: ${schedule.endereco_atendimento}'),
           Text('Cliente: ${schedule.client_name}'),
         ],
       ),

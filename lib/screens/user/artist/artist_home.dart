@@ -10,7 +10,7 @@ import 'package:tatuagem_front/screens/components/menu.dart';
 import 'package:tatuagem_front/screens/components/user_menu.dart';
 import 'package:tatuagem_front/utils/TokenProvider.dart';
 import 'package:intl/intl.dart';
-import 'package:tatuagem_front/screens/components/tatooInfoDialog.dart';
+import 'package:tatuagem_front/screens/components/ScheduleInfoDialog.dart';
 
 class ArtistHome extends StatefulWidget {
   const ArtistHome({super.key});
@@ -101,7 +101,7 @@ class TatooCard extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return TattooInfoDialog(
+        return ScheduleInfoDialog(
           schedule: schedule,
           formatDate: formatDate,
         );
@@ -166,16 +166,19 @@ class TatooCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                    TextButton.icon(
-                      onPressed: () => onDelete(schedule.agendamento_id),
-                      icon: Icon(
-                        Icons.event_busy_outlined,
-                        color: Colors.red,
-                      ),
-                      label: Text(
-                        'Cancelar',
-                        style: TextStyle(
+                    Tooltip(
+                      message: 'Cancelar Agendamento',
+                      child: TextButton.icon(
+                        onPressed: () => onDelete(schedule.agendamento_id),
+                        icon: Icon(
+                          Icons.event_busy_outlined,
                           color: Colors.red,
+                        ),
+                        label: Text(
+                          'Cancelar',
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
                         ),
                       ),
                     ),

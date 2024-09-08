@@ -301,16 +301,6 @@ class TatooCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  //   child: Text(
-                  //     'Tamanho: ${tatoo.tamanho.toString()} cm',
-                  //     style: TextStyle(
-                  //       fontSize: 14.0,
-                  //       color: Colors.grey[600],
-                  //     ),
-                  //   ),
-                  // ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Text(

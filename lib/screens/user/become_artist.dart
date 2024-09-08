@@ -23,8 +23,9 @@ class _BecomeArtistState extends State<BecomeArtist> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _experienciaController = TextEditingController();
   final TextEditingController _statusController = TextEditingController();
-  String _tipoController = 'PROPRIETARIO';
-  final List<String> _tipoOptions = ['PROPRIETARIO', 'AUTONOMO'];
+  final TextEditingController _enderecoController = TextEditingController();
+  // String _tipoController = 'PROPRIETARIO';
+  // final List<String> _tipoOptions = ['PROPRIETARIO', 'AUTONOMO'];
 
   List<int>? _selectedFile;
   Uint8List? _bytesData;
@@ -54,6 +55,9 @@ class _BecomeArtistState extends State<BecomeArtist> {
     final decodedToken = tokenProvider.decodedToken;
     final String id = decodedToken['id'];
     final String xp = _experienciaController.text;
+    final String estudio = _enderecoController.text;
+
+    print(estudio);
 
     try {
 
@@ -69,7 +73,8 @@ class _BecomeArtistState extends State<BecomeArtist> {
           'nome': _nameController.text,
           'experiencia': xp,
           'status': _statusController.text,
-          'tipo': _tipoController,
+          'endereco_atendimento': estudio ,
+          'tipo': 'AUTONOMO',
           // 'imagem_perfil': imageBase64
         },
         headers: {
@@ -97,7 +102,7 @@ class _BecomeArtistState extends State<BecomeArtist> {
     _nameController.dispose();
     _experienciaController.dispose();
     _statusController.dispose();
-    _tipoController = '';
+    _enderecoController.dispose();
     super.dispose();
   }
 
@@ -138,28 +143,11 @@ class _BecomeArtistState extends State<BecomeArtist> {
                             labelText: 'Status',
                           ),
                         ),
-                        DropdownButtonFormField(
-                          value: _tipoController, // Valor atual do dropdown
+                        TextFormField(
+                          controller: _enderecoController,
                           decoration: const InputDecoration(
-                            labelText: 'Tipo',
+                            labelText: 'Endereço do seu estúdio',
                           ),
-                          items: const [
-                            DropdownMenuItem(
-                              value: "PROPRIETARIO",
-                              child: Text("PROPRIETARIO")
-                            ),
-                            DropdownMenuItem(
-                                value: "AUTONOMO",
-                                child: Text("AUTONOMO")
-                            )
-                          ],
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              if(newValue != null){
-                                _tipoController = newValue;
-                              }
-                            });
-                          },
                         ),
                         const SizedBox(height: 20),
                         // IconButton(
