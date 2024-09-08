@@ -1,3 +1,5 @@
+// import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +23,8 @@ class _MyTattoosState extends State<MyTattoos> {
   List<Tattoo> _tattoos = [];
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _imageController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController(); 
+  
 
   Future<void> _create() async{
     String msg = "Tatuagem cadastrada com sucesso";
@@ -224,7 +227,7 @@ class TatooCard extends StatelessWidget {
     super.key,
     required this.tatoo,
     required this.onEdit,
-    required this.onDelete,
+    required this.onDelete, 
   });
 
   final Tattoo tatoo;
@@ -302,22 +305,6 @@ class TatooCard extends StatelessWidget {
                       color: Colors.red,
                       onPressed: () => onDelete(tatoo.id!),
                     ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: TextButton(
-                          onPressed: () {
-                            print('botão do card pressionado');
-                          },
-                          style: TextButton.styleFrom(
-                            backgroundColor:
-                                Colors.blue[900], // Define a cor de fundo
-                          ),
-                          child: const Text(
-                            "Agendar",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
                     ],
                   )
                 ],
@@ -327,3 +314,34 @@ class TatooCard extends StatelessWidget {
     );
   }
 }
+
+//  Future<bool> isTatuador() async {
+//     final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
+//     if(tokenProvider.decodedToken['tatuador'] != null){
+//       return true;
+//     }
+//     return false;
+//   }
+                    // FutureBuilder<bool>(
+                    //   future: isTatuador,
+                    //   builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                    //     if (snapshot.hasData && snapshot.data == false) {
+                    //       return Padding(
+                    //         padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    //         child: TextButton(
+                    //           onPressed: () {
+                    //             print('botão do card pressionado');
+                    //           },
+                    //           style: TextButton.styleFrom(
+                    //             backgroundColor: Colors.blue[900],
+                    //           ),
+                    //           child: const Text(
+                    //             "Agendar",
+                    //             style: TextStyle(color: Colors.white),
+                    //           ),
+                    //         ),
+                    //       );
+                    //     }
+                    //     return Container(); 
+                    //   },
+                    // ),

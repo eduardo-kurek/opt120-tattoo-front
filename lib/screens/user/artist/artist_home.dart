@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:tatuagem_front/DAO/ScheduleDAO.dart';
 import 'package:tatuagem_front/DAO/TattooDAO.dart';
+import 'package:tatuagem_front/Models/Schedule.dart';
+import 'package:tatuagem_front/Models/Tattoo.dart';
+import 'package:tatuagem_front/Models/Utils.dart';
 import 'package:tatuagem_front/screens/components/authenticate.dart';
 import 'package:tatuagem_front/screens/components/menu.dart';
 import 'package:tatuagem_front/screens/components/user_menu.dart';
-import 'package:tatuagem_front/utils/Messenger.dart';
-
-import '../../../Models/Tattoo.dart';
-import '../../../utils/TokenProvider.dart';
+import 'package:tatuagem_front/utils/TokenProvider.dart';
+import 'package:intl/intl.dart';
+import 'package:tatuagem_front/screens/components/tatooInfoDialog.dart';
 
 class ArtistHome extends StatefulWidget {
   const ArtistHome({super.key});
@@ -18,19 +20,27 @@ class ArtistHome extends StatefulWidget {
 }
 
 class _ArtistHomeState extends State<ArtistHome> {
-  List<Tattoo> _tattoos = [];
+  List<Utils> _schedules = [];
 
-  Future<void> _cancelScheduling(String tattooId) async {
-    /*TODO: Implementar cancelamento de agendamento*/
+  void _refreshData() async {
+    final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
+    ScheduleDAO dao = ScheduleDAO(tokenProvider: tokenProvider);
+
+    _schedules = await dao.getAllByArtistUser();
+    setState(() {});
   }
 
-  void _refreshData() async{
+  void _cancelar(String agendamentoId) async{
     final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
-    TattooDAO dao = TattooDAO(tokenProvider: tokenProvider);
-    var decoded = tokenProvider.decodedToken;
+    ScheduleDAO dao = ScheduleDAO(tokenProvider: tokenProvider);
+    await dao.delete(agendamentoId);
+    _refreshData();
+  }
 
-    _tattoos = await dao.getAllByArtist('api/tatuagens/agendadas/artist');
-    setState(() {});
+  String _formatDate(String date) {
+    final DateTime dateTime = DateTime.parse(date).toLocal();
+    final DateFormat formatter = DateFormat('dd/MM/yyyy HH:mm');
+    return formatter.format(dateTime);
   }
 
   @override
@@ -44,28 +54,28 @@ class _ArtistHomeState extends State<ArtistHome> {
     return Authenticate(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Meus Agendamentos'),
+          title: const Text('Agendamentos'),
         ),
         drawer: const Menu(),
         body: Container(
           color: Colors.black87,
           padding: const EdgeInsets.all(15),
           child: LayoutBuilder(builder: (context, constraints) {
-            // Calcula o número de colunas com base na largura da tela
             int crossAxisCount = (constraints.maxWidth / 200).floor();
             return GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: crossAxisCount, // Número de colunas
+                  crossAxisCount: crossAxisCount, 
                   crossAxisSpacing: 20.0,
                   mainAxisSpacing: 20.0,
-                  childAspectRatio: 0.6, // Proporção do card (largura/altura)
+                  childAspectRatio: 0.6,
                 ),
-                itemCount: _tattoos.length,
+                itemCount: _schedules.length,
                 itemBuilder: (context, index) {
-                  final tatoo = _tattoos[index];
+                  final schedule = _schedules[index];
                   return TatooCard(
-                    tatoo: tatoo,
-                    onCancel: (tattooId) => _cancelScheduling(tattooId),
+                    schedule: schedule,
+                    onDelete: (agendamento_id) => _cancelar(agendamento_id),
+                    formatDate: _formatDate,
                   );
                 });
           }),
@@ -78,16 +88,29 @@ class _ArtistHomeState extends State<ArtistHome> {
 class TatooCard extends StatelessWidget {
   const TatooCard({
     super.key,
-    required this.tatoo,
-    required this.onCancel,
+    required this.schedule,
+    required this.onDelete, 
+    required this.formatDate,
   });
 
-  final Tattoo tatoo;
-  final void Function(String tattooId) onCancel;
+  final Utils schedule;
+  final void Function(String tattooId) onDelete;
+  final String Function(String date) formatDate;
+
+  void _showMoreInfo(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return TattooInfoDialog(
+          schedule: schedule,
+          formatDate: formatDate,
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    print('tatoo.imagem: ${tatoo.imagem}');
     return Card(
       elevation: 4.0,
       child: Column(
@@ -96,7 +119,7 @@ class TatooCard extends StatelessWidget {
           Flexible(
             flex: 1,
             child: Image.network(
-              tatoo.imagem,
+              schedule.imagem,
               width: double.infinity,
               fit: BoxFit.cover,
               errorBuilder: (BuildContext context, Object exception,
@@ -113,7 +136,7 @@ class TatooCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'R\$ ${tatoo.preco.toString().replaceAll('.', ',')}',
+                      'R\$ ${schedule.preco.toString().replaceAll('.', ',')}',
                       style: const TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.bold,
@@ -123,7 +146,7 @@ class TatooCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Text(
-                      'Tamanho: ${tatoo.tamanho.toString()} cm',
+                      'Data: ${formatDate(schedule.data_inicio)}',
                       style: TextStyle(
                         fontSize: 14.0,
                         color: Colors.grey[600],
@@ -133,23 +156,32 @@ class TatooCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Text(
-                      'Estilo: ${tatoo.estilo}',
+                      '${schedule.duracao.toString()} minutos',
                       style: TextStyle(
                         fontSize: 14.0,
                         color: Colors.grey[600],
                       ),
                     ),
                   ),
-                  // const SizedBox(
-                  //   height: 50,
-                  // ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      IconButton(
-                        icon: const Icon(Icons.event_busy),
+                    TextButton.icon(
+                      onPressed: () => onDelete(schedule.agendamento_id),
+                      icon: Icon(
+                        Icons.event_busy_outlined,
                         color: Colors.red,
-                        onPressed: () => onCancel(tatoo.id!),
+                      ),
+                      label: Text(
+                        'Cancelar',
+                        style: TextStyle(
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                        icon: const Icon(Icons.info_outline, color: Colors.blue),
+                        onPressed: () => _showMoreInfo(context)
                       ),
                     ],
                   )

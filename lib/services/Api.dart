@@ -47,11 +47,15 @@ class ApiService {
   static Future<Map<String, dynamic>> post(
       String endpoint, Map<String, dynamic> body,
       {Map<String, String>? headers}) async {
+
     final response = await http.post(
       Uri.parse('$baseUrl/$endpoint'),
       headers: headers ?? {'Content-Type': 'application/json; charset=UTF-8'},
       body: jsonEncode(body),
     );
+
+    print(response.body);
+    print(response.statusCode);
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       try {
