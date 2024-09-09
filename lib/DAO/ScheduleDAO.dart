@@ -43,6 +43,17 @@ Future<Map<String, dynamic>> _getUser(String userId) async {
   );
 }
 
+Future<Map<String, dynamic>> _getTatuadorUser(String userId) async {
+
+  final decodedToken = tokenProvider.decodedToken;
+  final String id = decodedToken['id'];
+
+  return await ApiService.get(
+    'api/usuarios/perfil/$userId',
+    headers: {'Authorization': 'Bearer ${await tokenProvider.token}'},
+  );
+}
+
 Future<Map<String, dynamic>> _getTatuador(String tatuadorId) async {
   return await ApiService.get(
     'api/tatuadores/$tatuadorId',
@@ -55,13 +66,16 @@ Future<Utils> _createUtils(Schedule schedule) async {
 
   final user = await _getUser(schedule.client_id);
   final tatuador = await _getTatuador(schedule.tatuador_id);
+  final tatuador_user = await _getTatuadorUser(tatuador['usuario_id']);
 
   return Utils(
     agendamento_id: schedule.id,
     client_id: schedule.client_id,
-    client_name: user['nome'],
+    client_name: user['nome_completo'],
+    client_phone: user['telefone_celular'] ?? '',
     tatuador_id: schedule.tatuador_id,
     tatuador_name: tatuador['nome'],
+    tatuador_phone: tatuador_user['telefone_celular'] ?? '',
     endereco_atendimento: tatuador['endereco_atendimento'] ?? '',
     tatuagem_id: schedule.tatuagem_id,
     observacao: schedule.observacao,

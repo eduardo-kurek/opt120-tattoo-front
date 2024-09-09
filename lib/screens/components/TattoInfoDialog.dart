@@ -22,6 +22,7 @@ class Tattoinfodialog extends StatelessWidget {
           Text('Preço: R\$ ${tatto.preco.toString().replaceAll('.', ',')}'),
           Text('Duração: ${tatto.duracao} minutos'),
           Text('Tatuador: ${tatto.tatuador_name}'),
+          Text('Telefone: ${tatto.tatuador_phone}'),
           Text('Endereço: ${tatto.endereco_atendimento}'),
         ],
       ),

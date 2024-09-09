@@ -70,7 +70,7 @@ class _BecomeArtistState extends State<BecomeArtist> {
         'api/tatuadores',
         {
           'usuario_id': id,
-          'nome': _nameController.text,
+          // 'nome': _nameController.text,
           'experiencia': xp,
           'status': _statusController.text,
           'endereco_atendimento': estudio ,
@@ -125,12 +125,12 @@ class _BecomeArtistState extends State<BecomeArtist> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        TextFormField(
-                          controller: _nameController,
-                          decoration: const InputDecoration(
-                            labelText: 'Nome completo',
-                          ),
-                        ),
+                        // TextFormField(
+                        //   controller: _nameController,
+                        //   decoration: const InputDecoration(
+                        //     labelText: 'Nome completo',
+                        //   ),
+                        // ),
                         TextFormField(
                           controller: _experienciaController,
                           decoration: const InputDecoration(

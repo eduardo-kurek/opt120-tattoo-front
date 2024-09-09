@@ -25,8 +25,10 @@ class ScheduleInfoDialog extends StatelessWidget {
           Text('Preço: R\$ ${schedule.preco.toString().replaceAll('.', ',')}'),
           Text('Duração: ${schedule.duracao} minutos'),
           Text('Tatuador: ${schedule.tatuador_name}'),
+          Text('Telefone: ${schedule.tatuador_phone}'),
           Text('Endereço: ${schedule.endereco_atendimento}'),
           Text('Cliente: ${schedule.client_name}'),
+          Text('Telefone: ${schedule.client_phone}'),
         ],
       ),
       actions: [

@@ -24,6 +24,7 @@ class _MyAccountState extends State<MyAccount> {
   final TextEditingController _cpfController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _telefoneController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   late final String _token;
   late final String _userId;
@@ -79,13 +80,14 @@ class _MyAccountState extends State<MyAccount> {
   void updateUser() async {
     try {
       final Map<String, dynamic> data = await ApiService.patch(
-        'api/usuarios/atualizar-perfil/$_userId',
+        'api/usuarios/atualizar-perfil/$_userId?senha=${_passwordController.text}',
         {
           'nome': _nameController.text,
           'cpf': _cpfController.text,
           'rg': _rgController.text,
           'email': _emailController.text,
-          'telefone_celular': _telefoneController.text
+          'telefone_celular': _telefoneController.text,
+          'senha': _passwordController.text,
         },
         headers: {
           'Authorization': 'Bearer $_token',
@@ -95,6 +97,11 @@ class _MyAccountState extends State<MyAccount> {
 
       if (data['statusCode'] == 200) {
         Messenger.snackBar(context, "Dados atualizados com sucesso");
+        Navigator.pop(context);
+      } else if (data['statusCode'] == 401) {
+        Messenger.snackBar(context, "Senha incorreta");
+      } else {
+        Messenger.snackBar(context, "Erro ao atualizar dados");
       }
     } catch (e) {
       Map<String, dynamic> data =
@@ -175,6 +182,13 @@ class _MyAccountState extends State<MyAccount> {
                         decoration: const InputDecoration(
                             labelText: 'Telefone',
                             hintText: '+5544999999999'
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      TextFormField(
+                        controller: _passwordController,
+                        decoration: const InputDecoration(
+                          labelText: 'Para validar as alterações, digite sua senha',
                         ),
                       ),
                       SizedBox(height: 20),

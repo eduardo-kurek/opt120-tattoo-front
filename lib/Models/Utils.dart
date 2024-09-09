@@ -2,8 +2,10 @@ class Utils{
   String agendamento_id;
   String client_id;
   String client_name;
+  String client_phone;
   String tatuador_id;
   String tatuador_name;
+  String tatuador_phone;
   String tatuagem_id;
   String observacao;
   String imagem;
@@ -28,6 +30,8 @@ class Utils{
     required this.preco,
     required this.client_name,
     required this.tatuador_name,
+    required this.client_phone,
+    required this.tatuador_phone,
     // required this.tamanho,
     required this.duracao,
   });
@@ -48,6 +52,8 @@ class Utils{
       preco: json['preco'] ?? 0.0,
       // tamanho: json['tamanho'] ?? 0,
       duracao: json['duracao'] ?? 0,
+      client_phone: json['client_phone'] ?? '',
+      tatuador_phone: json['tatuador_phone'] ?? '',
     );
   }
 }

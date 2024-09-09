@@ -18,6 +18,16 @@ class TattooDAO {
   );
 }
 
+Future<Map<String, dynamic>> _getUser(String userId) async {
+  final decodedToken = tokenProvider.decodedToken;
+  final String id = decodedToken['id'];
+
+  return await ApiService.get(
+    'api/usuarios/perfil/$userId',
+    headers: {'Authorization': 'Bearer ${await tokenProvider.token}'},
+  );
+}
+
   Future<List<Utils>> getAll() async {
     final decodedToken = tokenProvider.decodedToken;
 
@@ -31,14 +41,18 @@ class TattooDAO {
     List<Utils> utils = [];
 
     for (var tattoo in tattoos) {
-      final tatuador = await _getTatuador(tattoo.tatuador_id);
+      var tatuador = await _getTatuador(tattoo.tatuador_id);
+      String user_id = tatuador['usuario_id'];
+      var user = await _getUser(user_id);
 
       Utils util = Utils(
         agendamento_id: '',
         client_id: '',
         client_name: '',
+        client_phone: '',
         tatuador_id: tatuador['id'],
         tatuador_name: tatuador['nome'],
+        tatuador_phone: user['telefone_celular'] ?? '',
         tatuagem_id: tattoo.id,
         observacao: '',
         imagem: tattoo.imagem,
