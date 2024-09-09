@@ -30,7 +30,7 @@ class _UserHomeState extends State<UserHome> {
     setState(() {});
   }
 
-  void _cancelar(String agendamentoId) async{
+  void _cancelar(String agendamentoId) async {
     final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
     ScheduleDAO dao = ScheduleDAO(tokenProvider: tokenProvider);
     await dao.delete(agendamentoId);
@@ -63,26 +63,27 @@ class _UserHomeState extends State<UserHome> {
           child: LayoutBuilder(builder: (context, constraints) {
             // Calcula o número de colunas com base na largura da tela
             int crossAxisCount = (constraints.maxWidth / 200).floor();
-            return _schedules.isEmpty ?
-              const Center(
-                  child: Text("Nenhum agendamento em andamento", style: TextStyle(fontSize: 22, color: Colors.white))
-              ) :
-              GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: crossAxisCount, // Número de colunas
-                  crossAxisSpacing: 20.0,
-                  mainAxisSpacing: 20.0,
-                  childAspectRatio: 0.6, // Proporção do card (largura/altura)
-                ),
-                itemCount: _schedules.length,
-                itemBuilder: (context, index) {
-                  final schedule = _schedules[index];
-                  return TatooCard(
-                    schedule: schedule,
-                    onDelete: (agendamento_id) => _cancelar(agendamento_id),
-                    formatDate: (date) => _formatDate(date),
-                  );
-                });
+            return _schedules.isEmpty
+                ? const Center(
+                    child: Text("Nenhum agendamento em andamento",
+                        style: TextStyle(fontSize: 22, color: Colors.white)))
+                : GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount, // Número de colunas
+                      crossAxisSpacing: 20.0,
+                      mainAxisSpacing: 20.0,
+                      childAspectRatio:
+                          0.5, // Proporção do card (largura/altura)
+                    ),
+                    itemCount: _schedules.length,
+                    itemBuilder: (context, index) {
+                      final schedule = _schedules[index];
+                      return TatooCard(
+                        schedule: schedule,
+                        onDelete: (agendamento_id) => _cancelar(agendamento_id),
+                        formatDate: (date) => _formatDate(date),
+                      );
+                    });
           }),
         ),
       ),
@@ -94,7 +95,7 @@ class TatooCard extends StatelessWidget {
   const TatooCard({
     super.key,
     required this.schedule,
-    required this.onDelete, 
+    required this.onDelete,
     required this.formatDate,
   });
 
@@ -168,31 +169,31 @@ class TatooCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                 Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                    Tooltip(
-                      message: 'Cancelar Agendamento',
-                      child: TextButton.icon(
-                        onPressed: () => onDelete(schedule.agendamento_id),
-                        icon: Icon(
-                          Icons.event_busy_outlined,
-                          color: Colors.red,
-                        ),
-                        label: Text(
-                          'Cancelar',
-                          style: TextStyle(
+                      Tooltip(
+                        message: 'Cancelar Agendamento',
+                        child: TextButton.icon(
+                          onPressed: () => onDelete(schedule.agendamento_id),
+                          icon: const Icon(
+                            Icons.event_busy_outlined,
                             color: Colors.red,
+                          ),
+                          label: const Text(
+                            'Cancelar',
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
                           ),
                         ),
                       ),
-                    ),
                     ],
                   ),
                   IconButton(
-                        icon: const Icon(Icons.info_outline, color: Colors.blue),
-                        onPressed: () => _showMoreInfo(context),
-                      ),
+                    icon: const Icon(Icons.info_outline, color: Colors.blue),
+                    onPressed: () => _showMoreInfo(context),
+                  ),
                 ],
               )),
         ],

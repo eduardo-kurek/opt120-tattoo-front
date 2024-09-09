@@ -32,12 +32,12 @@ class _LoginState extends State<Login> {
 
       if (data['statusCode'] == 200) {
         setToken(data['body']['token']);
-        if(JwtDecoder.decode(data['body']['token'])['tatuador'] == null){
+        if (JwtDecoder.decode(data['body']['token'])['tatuador'] == null) {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => UserHome()),
           );
-        }else{
+        } else {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => ArtistHome()),
@@ -53,7 +53,7 @@ class _LoginState extends State<Login> {
   }
 
   @override
-  Widget build(BuildContext context) {  
+  Widget build(BuildContext context) {
     final tokenProvider = Provider.of<TokenProvider>(context);
 
     return Scaffold(
@@ -65,43 +65,46 @@ class _LoginState extends State<Login> {
           color: Colors.black87,
           padding: const EdgeInsets.all(50),
           child: Center(
-              child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Image.asset('assets/images/logo.jpg'),
-                  const SizedBox(height: 10),
-                  const Text("Entrar", style: TextStyle(fontSize: 25)),
-                  const Divider(height: 50, indent: 10),
-                  TextFormField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(
-                        labelText: 'Usuário',
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.person)
+            child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: 400, // Define a largura máxima
+                  maxHeight: 800, // Define a altura máxima
+                ),
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset('assets/images/logo.jpg'),
+                        const SizedBox(height: 10),
+                        const Text("Entrar", style: TextStyle(fontSize: 25)),
+                        const Divider(height: 50, indent: 10),
+                        TextFormField(
+                          controller: _nameController,
+                          decoration: const InputDecoration(
+                              labelText: 'Usuário',
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Icons.person)),
+                        ),
+                        const SizedBox(height: 20),
+                        TextFormField(
+                          controller: _passwordController,
+                          decoration: const InputDecoration(
+                              labelText: 'Senha',
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Icons.lock)),
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                            onPressed: () => login(tokenProvider.setToken),
+                            child: const Text("Entrar",
+                                style: TextStyle(fontSize: 17)))
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: _passwordController,
-                    decoration: const InputDecoration(
-                        labelText: 'Senha',
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.lock)
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                      onPressed: () => login(tokenProvider.setToken),
-                      child: const Text("Entrar", style: TextStyle(fontSize: 17)))
-                ],
-              ),
-            ),
-          )
-        ),
-      )
-    );
+                )),
+          ),
+        ));
   }
 }

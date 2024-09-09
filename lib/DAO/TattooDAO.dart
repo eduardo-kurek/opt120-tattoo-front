@@ -106,7 +106,7 @@ Future<Map<String, dynamic>> _getUser(String userId) async {
     if (response['statusCode'] != 201) {
       return response['body']['message'];
     }
-    return response['body'];
+    return 'Tatuagem cadastrada com sucesso';
   }
 
   Future<void> update(tattoo, tattoId) async {
