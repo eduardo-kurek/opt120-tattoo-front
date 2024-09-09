@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokenProvider = Provider.of<TokenProvider>(context);
     final isLogged = tokenProvider.isLogged();
-
+  
     if (isLogged) {
       return const MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -32,7 +32,10 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => TokenProvider()),
       ],
-      child: const MyApp(),
+      child: Container(
+        color: Colors.black87,
+        child: const MyApp()
+      ),
     ),
   );
 }
