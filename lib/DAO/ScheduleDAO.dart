@@ -71,7 +71,7 @@ Future<Utils> _createUtils(Schedule schedule) async {
   return Utils(
     agendamento_id: schedule.id,
     client_id: schedule.client_id,
-    client_name: user['nome_completo'],
+    client_name: user['nome_completo'] ?? '',
     client_phone: user['telefone_celular'] ?? '',
     tatuador_id: schedule.tatuador_id,
     tatuador_name: tatuador['nome'],
