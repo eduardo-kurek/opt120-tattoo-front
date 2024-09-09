@@ -63,7 +63,11 @@ class _UserHomeState extends State<UserHome> {
           child: LayoutBuilder(builder: (context, constraints) {
             // Calcula o número de colunas com base na largura da tela
             int crossAxisCount = (constraints.maxWidth / 200).floor();
-            return GridView.builder(
+            return _schedules.isEmpty ?
+              const Center(
+                  child: Text("Nenhum agendamento em andamento", style: TextStyle(fontSize: 22, color: Colors.white))
+              ) :
+              GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: crossAxisCount, // Número de colunas
                   crossAxisSpacing: 20.0,

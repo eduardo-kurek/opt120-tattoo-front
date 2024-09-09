@@ -62,7 +62,11 @@ class _ArtistHomeState extends State<ArtistHome> {
           padding: const EdgeInsets.all(15),
           child: LayoutBuilder(builder: (context, constraints) {
             int crossAxisCount = (constraints.maxWidth / 200).floor();
-            return GridView.builder(
+            return _schedules.isEmpty ?
+            const Center(
+                child: Text("Nenhum agendamento em andamento", style: TextStyle(fontSize: 22, color: Colors.white))
+            ) :
+            GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: crossAxisCount, 
                   crossAxisSpacing: 20.0,
