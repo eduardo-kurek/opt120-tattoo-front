@@ -59,7 +59,7 @@ class _LoginState extends State<Login> {
     return Scaffold(
         drawer: const Menu(),
         appBar: AppBar(
-          title: const Text("Entrar no sistema"),
+          title: const Text("Tattoo Booker"),
         ),
         body: Container(
           color: Colors.black87,
@@ -71,6 +71,8 @@ class _LoginState extends State<Login> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Image.asset('assets/images/logo.jpg'),
+                  const SizedBox(height: 10),
                   const Text("Entrar", style: TextStyle(fontSize: 25)),
                   const Divider(height: 50, indent: 10),
                   TextFormField(
