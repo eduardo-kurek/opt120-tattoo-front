@@ -15,13 +15,3 @@ class ApiService {
   ...
 }
 ```
-
-
-## Tecnologias usadas
-
-* http: ^1.2.2
-* jwt_decoder: ^2.0.1
-* provider: ^6.1.2
-* image_picker: ^0.8.5+3
-* omni_datetime_picker: ^2.0.4
-* intl: ^0.17.0
