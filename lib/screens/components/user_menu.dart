@@ -7,6 +7,8 @@ import 'package:tatuagem_front/forms/tattoo_artist_form.dart';
 import 'package:tatuagem_front/forms/my_account_form.dart';
 import 'package:tatuagem_front/screens/user/new_scheduling.dart';
 
+import '../user/change_password.dart';
+
 class UserMenu extends StatelessWidget {
   const UserMenu({super.key});
 
@@ -29,6 +31,16 @@ class UserMenu extends StatelessWidget {
           onTap: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const MyAccount()));
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.password),
+          title: const Text("Alterar Senha"),
+          onTap: () => {
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ChangePassword())
+            )
           },
         ),
         ListTile(
